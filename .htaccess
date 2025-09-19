@@ -1,0 +1,13 @@
+# Allow CORS preflight requests from browsers
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type"
+</IfModule>
+
+# --- Your original rules below ---
+DirectoryIndex index.html index.php default.php
+
+# Block any PHP execution from parent directories
+php_value auto_prepend_file none
+php_value auto_append_file none

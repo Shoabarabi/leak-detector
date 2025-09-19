@@ -1,0 +1,656 @@
+// Global variables
+let selectedIndustry = '';
+let selectedRevenue = 0;
+let sessionId = '';
+let currentQuestionIndex = 0;
+let questions = [];
+let responses = [];
+
+// API Configuration - Replace with your Google Apps Script API URL
+
+const API_URL = 'https://leakdetector.mainnov.tech/proxy.php';
+
+// Initialize the application
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('Business Profit Leak Diagnostic initialized');
+  generateSessionId();
+  loadIndustries();
+  loadQuestions();
+});
+
+// Generate unique session ID
+function generateSessionId() {
+  sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+  console.log('Generated session ID:', sessionId);
+}
+
+// Load industries for selection
+function loadIndustries() {
+  console.log('Loading industries directly...');
+  
+  // Hardcode the industries from your SMBCalc sheet
+  const industries = [
+    'Beauty & Skincare',
+    'Supplements & Nutraceuticals',
+    'Fashion & Apparel',
+    'Home & Garden',
+    'Pet Products',
+    'Food & Beverage',
+    'Electronics & Tech Accessories',
+    'Fitness & Wellness',
+    'Baby & Kids',
+    'Jewelry & Accessories',
+    'Outdoor & Sports',
+    'Automotive Accessories',
+    'Arts & Crafts',
+    'Personal Care (Salons/Spas)',
+    'Subscription Boxes',
+    'Consulting',
+    'Tech Services',
+    'Real Estate',
+    'Business Services',
+    'Education',
+    'Marketing Services',
+    'Recruiting',
+    'Nonprofit',
+    'Retail Consulting',
+    'Health Tech',
+    'Publishing',
+    'Electronics & Tech (SaaS)',
+    'Ecommerce Services',
+    'Tech Consulting',
+    'Personal Care (Dental)',
+    'Business Advocacy',
+    'Retail',
+    'Default (Other SMBs)'
+  ];
+  
+  console.log('About to display', industries.length, 'industries');
+  displayIndustries(industries);
+}
+
+function displayIndustries(industries) {
+  const grid = document.getElementById('industry-grid');
+  if (!grid) {
+    console.error('industry-grid element not found!');
+    return;
+  }
+  
+  grid.innerHTML = '';
+  
+  industries.forEach(industry => {
+    const button = document.createElement('button');
+    button.className = 'industry-btn';
+    button.textContent = industry;
+    button.onclick = () => selectIndustry(industry, button);
+    grid.appendChild(button);
+  });
+  
+  console.log('Industries displayed:', industries.length);
+}
+
+// Industry selection
+function selectIndustry(industry, button) {
+  selectedIndustry = industry;
+  
+  // Update UI
+  document.querySelectorAll('.industry-btn').forEach(btn => {
+    btn.classList.remove('selected');
+  });
+  
+  button.classList.add('selected');
+  
+  // Show continue button
+  document.getElementById('continue-to-revenue').classList.remove('hidden');
+  
+  console.log('Selected industry:', industry);
+}
+
+// Show revenue input screen
+function showRevenueScreen() {
+  if (!selectedIndustry) {
+    alert('Please select an industry first.');
+    return;
+  }
+  
+  hideAllScreens();
+  document.getElementById('revenue-input').classList.add('active');
+  updateProgress(20);
+}
+
+// Revenue selection
+function selectRevenue(amount) {
+  selectedRevenue = amount;
+  
+  // Update UI
+  document.querySelectorAll('.revenue-btn').forEach(btn => {
+    btn.classList.remove('selected');
+  });
+  
+  event.target.classList.add('selected');
+  
+  // Clear custom input
+  document.getElementById('custom-revenue').value = '';
+  
+  // Show start button
+  document.getElementById('start-assessment').classList.remove('hidden');
+  
+  console.log('Selected revenue:', amount);
+}
+
+function useCustomRevenue() {
+  const customValue = document.getElementById('custom-revenue').value;
+  if (!customValue || customValue <= 0) {
+    alert('Please enter a valid revenue amount');
+    return;
+  }
+  
+  selectedRevenue = parseFloat(customValue);
+  
+  // Update UI
+  document.querySelectorAll('.revenue-btn').forEach(btn => {
+    btn.classList.remove('selected');
+  });
+  
+  // Show start button
+  document.getElementById('start-assessment').classList.remove('hidden');
+  
+  console.log('Custom revenue:', selectedRevenue);
+}
+
+
+
+// Load quiz questions - UPDATED to use fetch API
+function loadQuestions() {
+  fetch(`${API_URL}?action=getQuizQuestions`)
+    .then(response => response.json())
+    .then(data => {
+      questions = data;
+      console.log('Loaded', questions.length, 'questions');
+    })
+    .catch(error => {
+      console.error('Error loading questions:', error);
+      handleError(error);
+    });
+}
+
+
+
+
+// Start the assessment
+function startAssessment() {
+  if (!selectedIndustry || !selectedRevenue) {
+    alert('Please select both industry and revenue first.');
+    return;
+  }
+  
+  currentQuestionIndex = 0;
+  responses = [];
+  
+  hideAllScreens();
+  document.getElementById('quiz-screen').classList.add('active');
+  updateProgress(25);
+  displayQuestion();
+}
+
+// Display current question
+function displayQuestion() {
+  if (currentQuestionIndex >= questions.length) {
+    calculateResults();
+    return;
+  }
+  
+  const question = questions[currentQuestionIndex];
+  
+  // Update section title
+  document.getElementById('section-title').textContent = question.section;
+  document.getElementById('question-counter').textContent = 
+    `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+  
+  // Update question text
+  document.getElementById('question-text').textContent = question.text;
+  
+  // Update options
+  const optionsContainer = document.getElementById('options-container');
+  optionsContainer.innerHTML = '';
+  
+  question.options.forEach((option, index) => {
+    const optionDiv = document.createElement('div');
+    optionDiv.className = 'option';
+    optionDiv.onclick = () => selectOption(option, optionDiv);
+    
+    const optionText = document.createElement('span');
+    optionText.textContent = option.text;
+    
+    optionDiv.appendChild(optionText);
+    optionsContainer.appendChild(optionDiv);
+  });
+  
+  // Check if question was already answered
+  const existingResponse = responses.find(r => r.questionId === question.id);
+  if (existingResponse) {
+    const options = optionsContainer.querySelectorAll('.option');
+    question.options.forEach((opt, idx) => {
+      if (opt.value === existingResponse.value) {
+        options[idx].classList.add('selected');
+      }
+    });
+    document.getElementById('next-question').disabled = false;
+  } else {
+    document.getElementById('next-question').disabled = true;
+  }
+  
+  // Update navigation buttons
+  document.getElementById('prev-question').disabled = currentQuestionIndex === 0;
+  
+  if (currentQuestionIndex === questions.length - 1) {
+    document.getElementById('next-question').textContent = 'See Results';
+  } else {
+    document.getElementById('next-question').textContent = 'Next';
+  }
+  
+  // Update progress
+  const progress = 25 + (currentQuestionIndex / questions.length * 65);
+  updateProgress(progress);
+}
+
+// Handle option selection
+function selectOption(option, optionDiv) {
+  // Clear previous selection
+  document.querySelectorAll('.option').forEach(opt => {
+    opt.classList.remove('selected');
+  });
+  
+  // Select this option
+  optionDiv.classList.add('selected');
+  
+  // Store response
+  const question = questions[currentQuestionIndex];
+  const existingIndex = responses.findIndex(r => r.questionId === question.id);
+  
+  const response = {
+    questionId: question.id,
+    question: question.text,
+    category: question.category,
+    answer: option.text,
+    value: option.value
+  };
+  
+  if (existingIndex >= 0) {
+    responses[existingIndex] = response;
+  } else {
+    responses.push(response);
+  }
+  
+  // Enable next button
+  document.getElementById('next-question').disabled = false;
+}
+
+// Navigate to next question
+function nextQuestion() {
+  if (currentQuestionIndex < questions.length - 1) {
+    currentQuestionIndex++;
+    displayQuestion();
+  } else {
+    calculateResults();
+  }
+}
+
+// Navigate to previous question
+function previousQuestion() {
+  if (currentQuestionIndex > 0) {
+    currentQuestionIndex--;
+    displayQuestion();
+  }
+}
+
+// Calculate and display results - UPDATED to use fetch API
+
+
+function calculateResults() {
+  if (responses.length < questions.length) {
+    alert('Please answer all questions before seeing results.');
+    return;
+  }
+  
+  showLoading('Analyzing your profit leaks...');
+  
+  // Convert to GET request to avoid CORS issues
+  const params = new URLSearchParams({
+    action: 'calculateLeakage',
+    industry: selectedIndustry,
+    revenue: selectedRevenue,
+    sessionId: sessionId,
+    responses: JSON.stringify(responses)
+  });
+  
+  fetch(API_URL + '?' + params.toString())
+    .then(response => response.json())
+    .then(result => displayResults(result))
+    .catch(error => {
+      console.error('Error calculating results:', error);
+      hideLoading();
+      alert('Error calculating results. Please try again.');
+    });
+}
+
+// Display results
+function displayResults(result) {
+  hideLoading();
+  
+  if (result.error) {
+    alert('Error calculating results: ' + result.error);
+    return;
+  }
+  
+  hideAllScreens();
+  document.getElementById('results-screen').classList.add('active');
+  updateProgress(100);
+  
+  // Update headline
+  document.getElementById('result-industry').textContent = result.industry;
+  document.getElementById('industry-average').textContent = '25-30%';
+  document.getElementById('leak-percentage').textContent = 
+    result.totalLeakagePercent.toFixed(1) + '%';
+  document.getElementById('leak-dollars').textContent = 
+    formatCurrency(result.totalLeakageDollars);
+  
+  // Display top 3 leaks
+  const topLeaksContainer = document.getElementById('top-leaks-container');
+  topLeaksContainer.innerHTML = '';
+  
+  result.topThreeLeaks.forEach((leak, index) => {
+    const leakDiv = document.createElement('div');
+    leakDiv.className = 'leak-item top-leak';
+    leakDiv.innerHTML = `
+      <div class="leak-rank">#${index + 1}</div>
+      <div class="leak-info">
+        <div class="leak-category">${leak.category}</div>
+        <div class="leak-metrics">
+          <span class="leak-percent">${leak.leakagePercent.toFixed(1)}% of revenue</span>
+          <span class="leak-dollar">${formatCurrency(leak.leakageDollars)}</span>
+        </div>
+      </div>
+    `;
+    topLeaksContainer.appendChild(leakDiv);
+  });
+  
+  // Show recovery potential
+  document.getElementById('recovery-dollars').textContent = 
+    formatCurrency(result.potentialRecovery);
+  
+  // Show detailed breakdown
+  const breakdownContainer = document.getElementById('breakdown-container');
+  breakdownContainer.innerHTML = '';
+  
+  result.leaks.forEach(leak => {
+    const leakDiv = document.createElement('div');
+    leakDiv.className = 'leak-item';
+    
+    // Determine severity class
+    let severityClass = 'low';
+    if (leak.leakagePercent > 5) severityClass = 'medium';
+    if (leak.leakagePercent > 10) severityClass = 'high';
+    
+    leakDiv.classList.add(severityClass);
+    
+    leakDiv.innerHTML = `
+      <div class="leak-category">${leak.category}</div>
+      <div class="leak-bar-container">
+        <div class="leak-bar" style="width: ${Math.min(leak.leakagePercent * 3, 100)}%"></div>
+      </div>
+      <div class="leak-metrics">
+        <span class="leak-percent">${leak.leakagePercent.toFixed(1)}%</span>
+        <span class="leak-dollar">${formatCurrency(leak.leakageDollars)}</span>
+      </div>
+    `;
+    
+    breakdownContainer.appendChild(leakDiv);
+  });
+  
+  
+  // Add email capture modal after showing results
+  setTimeout(() => {
+    showEmailCaptureModal(result);
+  }, 2000); // Show after 2 seconds of viewing results
+}
+
+function formatCurrency(amount) {
+  if (amount >= 1000000) {
+    return '$' + (amount / 1000000).toFixed(1) + 'M';
+  } else if (amount >= 1000) {
+    return '$' + Math.round(amount / 1000) + 'K';
+  } else {
+    return '$' + Math.round(amount);
+  }
+}
+
+// Update progress bar
+function updateProgress(percentage) {
+  document.getElementById('progress-fill').style.width = percentage + '%';
+  
+  let progressText = 'Get Started';
+  if (percentage >= 20 && percentage < 25) {
+    progressText = 'Revenue Input';
+  } else if (percentage >= 25 && percentage < 90) {
+    progressText = 'Assessment in Progress';
+  } else if (percentage >= 90 && percentage < 100) {
+    progressText = 'Calculating Results...';
+  } else if (percentage >= 100) {
+    progressText = 'Complete!';
+  }
+  
+  document.getElementById('progress-text').textContent = progressText;
+}
+
+// Utility functions
+function hideAllScreens() {
+  document.querySelectorAll('.screen').forEach(screen => {
+    screen.classList.remove('active');
+  });
+}
+
+function showLoading(message = 'Loading...') {
+  document.getElementById('loading-message').textContent = message;
+  document.getElementById('loading-overlay').classList.remove('hidden');
+}
+
+function hideLoading() {
+  document.getElementById('loading-overlay').classList.add('hidden');
+}
+
+function handleError(error) {
+  hideLoading();
+  console.error('Error:', error);
+  alert('An error occurred: ' + error.toString());
+}
+
+function startOver() {
+  // Reset everything
+  selectedIndustry = '';
+  selectedRevenue = 0;
+  currentQuestionIndex = 0;
+  responses = [];
+  generateSessionId();
+  
+  // Reset UI
+  document.querySelectorAll('.industry-btn').forEach(btn => {
+    btn.classList.remove('selected');
+  });
+  document.getElementById('continue-to-revenue').classList.add('hidden');
+  document.getElementById('start-assessment').classList.add('hidden');
+  
+  hideAllScreens();
+  document.getElementById('industry-selection').classList.add('active');
+  updateProgress(0);
+}
+
+function requestAudit() {
+  // This would typically integrate with your CRM or booking system
+  alert('Thank you for your interest! This would redirect to your booking page or contact form.');
+  
+  // Example: Redirect to Calendly or contact page
+  // window.open('https://calendly.com/your-calendar', '_blank');
+}
+
+
+// Add email capture modal
+// Add email capture modal
+function showEmailCaptureModal(result) {
+  const modal = document.createElement('div');
+  modal.className = 'email-capture-modal';
+  modal.innerHTML = `
+    <div class="modal-content">
+      <h2>Get Your Complete 4-Page Report</h2>
+      <p>We'll email you the detailed breakdown with:</p>
+      <ul>
+        <li>✓ Full leak analysis across all categories</li>
+        <li>✓ Industry benchmark comparisons</li>
+        <li>✓ ROI calculations & recovery plan</li>
+        <li>✓ 90-day action roadmap</li>
+      </ul>
+      <input type="email" id="report-email" placeholder="Enter your email" value="">
+      <button id="send-report-btn">Send My Report</button>
+      <p style="font-size: 12px; color: #666; margin-top: 10px;">
+        We'll also send you 3 case studies showing how similar businesses recovered their leaks.
+      </p>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  
+  // Add event listener after modal is added to DOM
+  document.getElementById('send-report-btn').addEventListener('click', function() {
+    const email = document.getElementById('report-email').value;
+    if (!email || !email.includes('@')) {
+      alert('Please enter a valid email address');
+      return;
+    }
+
+    showLoading('Generating your personalized report...');
+
+    // THIS FETCH CALL IS NOW CORRECTLY INSIDE THE CLICK LISTENER
+    
+    // THIS FETCH CALL IS NOW CORRECTLY INSIDE THE CLICK LISTENER
+    fetch(`${API_URL}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        action: 'sendEmailReport',
+        leadEmail: email,
+        result: result
+      })
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        console.log('Response ok:', response.ok);
+        
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
+        return response.text(); // First get as text to debug
+    })
+    .then(text => {
+        console.log('Raw response:', text);
+        try {
+            const data = JSON.parse(text);
+            hideLoading();
+            
+            if (data.success) {
+                const modal = document.querySelector('.email-capture-modal');
+                if (modal) {
+                    modal.innerHTML = `
+                      <div class="modal-content">
+                        <h2>✓ Report Sent!</h2>
+                        <p>Check your email for your personalized profit leak report.</p>
+                        <p>Want to discuss your specific situation?</p>
+                        <button onclick="window.open('https://calendly.com/mainnov/recovery')">Book Recovery Call</button>
+                        <button onclick="closeEmailModal()" style="margin-top: 10px; background: #666;">Close</button>
+                      </div>
+                    `;
+                    setTimeout(() => { closeEmailModal(); }, 5000);
+                }
+            } else {
+                throw new Error(data.error || 'Unknown error occurred');
+            }
+        } catch(parseError) {
+            console.error('JSON parse error:', parseError);
+            console.error('Raw text was:', text);
+            throw new Error('Invalid server response');
+        }
+    })
+    .catch(error => {
+        hideLoading();
+        console.error('Complete error details:', error);
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+        alert('Error sending report: ' + error.message + '\nPlease check console for details.');
+    });
+    
+    
+    .then(response => {
+        // Check if the server responded with an OK status
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
+        return response.json(); // Proceed to parse the JSON
+    })
+    
+}
+
+
+
+/*
+// Send report function
+//function sendDetailedReport(encodedResult) {
+  //const email = document.getElementById('report-email').value;
+  //if (!email || !email.includes('@')) {
+    //alert('Please enter a valid email address');
+    //return;
+  //}
+  
+  const result = JSON.parse(decodeURIComponent(encodedResult));
+  
+  showLoading('Generating your personalized report...');
+  
+  // Send via proxy to Apps Script
+  fetch(`${API_URL}`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      action: 'sendEmailReport',
+      leadEmail: email,
+      result: result
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    hideLoading();
+    if (data.success) {
+      // Replace modal with success message
+      document.querySelector('.email-capture-modal').innerHTML = `
+        <div class="modal-content">
+          <h2>✓ Report Sent!</h2>
+          <p>Check your email for your personalized profit leak report.</p>
+          <p>Want to discuss your specific situation?</p>
+          <button onclick="window.open('https://calendly.com/mainnov/recovery')">
+            Book Recovery Call
+          </button>
+        </div>
+      `;
+    }
+  })
+  .catch(error => {
+    hideLoading();
+    alert('Error sending report. Please try again.');
+  });
+}
+*/
+
+// Function to close email modal
+function closeEmailModal() {
+  const modal = document.querySelector('.email-capture-modal');
+  if (modal) modal.remove();
+}
+
+// Make function globally available for onclick handlers
+window.closeEmailModal = closeEmailModal;

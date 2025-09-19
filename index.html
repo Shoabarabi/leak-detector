@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revenue Leak Detector</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app-container">
+        <!-- Header Section -->
+        <header class="header">
+            <h1>Revenue Leak Detector</h1>
+            <p class="subtitle">Find your profit leaks in 3 minutes</p>
+            <p class="experience">$500M+ SMB optimization across 32 industries</p>
+            
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+                <span id="progress-text">Get Started</span>
+            </div>
+        </header>
+
+        <!-- Industry Selection Screen -->
+        <div id="industry-selection" class="screen active">
+            <h2>What's your industry?</h2>
+            <p>We'll use industry-specific benchmarks to calculate your profit leaks</p>
+            
+            <div class="industry-grid" id="industry-grid">
+                <!-- Industries will be loaded dynamically -->
+            </div>
+            
+            <button id="continue-to-revenue" class="btn-primary hidden" onclick="showRevenueScreen()">
+                Continue
+            </button>
+        </div>
+
+        <!-- Revenue Input Screen -->
+        <div id="revenue-input" class="screen">
+            <h2>What's your annual revenue?</h2>
+            <p>Last 12 months, approximately</p>
+            
+            <div class="revenue-options">
+                <button class="revenue-btn" onclick="selectRevenue(250000)">Under $250K</button>
+                <button class="revenue-btn" onclick="selectRevenue(500000)">$250K - $500K</button>
+                <button class="revenue-btn" onclick="selectRevenue(1000000)">$500K - $1M</button>
+                <button class="revenue-btn" onclick="selectRevenue(2500000)">$1M - $2.5M</button>
+                <button class="revenue-btn" onclick="selectRevenue(5000000)">$2.5M - $5M</button>
+                <button class="revenue-btn" onclick="selectRevenue(10000000)">$5M - $10M</button>
+                <button class="revenue-btn" onclick="selectRevenue(25000000)">$10M - $25M</button>
+                <button class="revenue-btn" onclick="selectRevenue(50000000)">$25M+</button>
+            </div>
+            
+            <div class="custom-revenue">
+                <p>Or enter exact amount:</p>
+                <input type="number" id="custom-revenue" placeholder="e.g., 3500000" />
+                <button class="btn-secondary" onclick="useCustomRevenue()">Use This Amount</button>
+            </div>
+            
+            <button id="start-assessment" class="btn-primary hidden" onclick="startAssessment()">
+                Start Assessment
+            </button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="screen">
+            <div class="section-header">
+                <h2 id="section-title">Loading...</h2>
+                <p id="question-counter">Question 1 of 12</p>
+            </div>
+            
+            <div id="question-container" class="question-container">
+                <h3 id="question-text">Loading question...</h3>
+                <div id="options-container" class="options">
+                    <!-- Options will be loaded dynamically -->
+                </div>
+            </div>
+            
+            <div class="quiz-navigation">
+                <button id="prev-question" class="btn-secondary" onclick="previousQuestion()" disabled>
+                    Previous
+                </button>
+                <button id="next-question" class="btn-primary" onclick="nextQuestion()" disabled>
+                    Next
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="screen">
+            <div class="results-header">
+                <h2>Your Profit Leak Analysis</h2>
+                
+                <div class="headline-result">
+                    <p class="industry-benchmark">
+                        Companies in <span id="result-industry">your industry</span> typically leak 
+                        <span id="industry-average">25%</span> of revenue.
+                    </p>
+                    <div class="your-result">
+                        <h3>You're leaking:</h3>
+                        <div class="leak-amount">
+                            <span id="leak-percentage">0%</span>
+                            <span class="separator">•</span>
+                            <span id="leak-dollars">$0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="top-leaks">
+                <h3>Your Top 3 Profit Leaks</h3>
+                <div id="top-leaks-container">
+                    <!-- Top leaks will be displayed here -->
+                </div>
+            </div>
+            
+            <div class="recovery-potential">
+                <h3>Recovery Potential</h3>
+                <p>Best practice companies in your vertical reduce leakage to ~12-15%.</p>
+                <div class="recovery-amount">
+                    For you, that's a recovery of <span id="recovery-dollars">$0</span>
+                </div>
+            </div>
+            
+            <div class="detailed-breakdown">
+                <h3>Detailed Breakdown</h3>
+                <div id="breakdown-container">
+                    <!-- All leaks will be listed here -->
+                </div>
+            </div>
+            
+            <div class="results-actions">
+                <button class="btn-secondary" onclick="startOver()">Take Assessment Again</button>
+                <button class="btn-primary" onclick="requestAudit()">
+                    Book Your Free Leak Audit →
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="loading-overlay hidden">
+            <div class="spinner"></div>
+            <p id="loading-message">Loading...</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
