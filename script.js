@@ -5,9 +5,9 @@ let sessionId = '';
 let currentQuestionIndex = 0;
 let questions = [];
 let responses = [];
+let currentResults = null; // Store results globally for reuse
 
-// API Configuration - Replace with your Google Apps Script API URL
-
+// API Configuration
 const API_URL = 'https://leakdetector.mainnov.tech/proxy.php';
 
 // Initialize the application
@@ -28,7 +28,6 @@ function generateSessionId() {
 function loadIndustries() {
   console.log('Loading industries directly...');
   
-  // Hardcode the industries from your SMBCalc sheet
   const industries = [
     'Beauty & Skincare',
     'Supplements & Nutraceuticals',
@@ -93,14 +92,11 @@ function displayIndustries(industries) {
 function selectIndustry(industry, button) {
   selectedIndustry = industry;
   
-  // Update UI
   document.querySelectorAll('.industry-btn').forEach(btn => {
     btn.classList.remove('selected');
   });
   
   button.classList.add('selected');
-  
-  // Show continue button
   document.getElementById('continue-to-revenue').classList.remove('hidden');
   
   console.log('Selected industry:', industry);
@@ -122,17 +118,12 @@ function showRevenueScreen() {
 function selectRevenue(amount) {
   selectedRevenue = amount;
   
-  // Update UI
   document.querySelectorAll('.revenue-btn').forEach(btn => {
     btn.classList.remove('selected');
   });
   
   event.target.classList.add('selected');
-  
-  // Clear custom input
   document.getElementById('custom-revenue').value = '';
-  
-  // Show start button
   document.getElementById('start-assessment').classList.remove('hidden');
   
   console.log('Selected revenue:', amount);
@@ -147,20 +138,16 @@ function useCustomRevenue() {
   
   selectedRevenue = parseFloat(customValue);
   
-  // Update UI
   document.querySelectorAll('.revenue-btn').forEach(btn => {
     btn.classList.remove('selected');
   });
   
-  // Show start button
   document.getElementById('start-assessment').classList.remove('hidden');
   
   console.log('Custom revenue:', selectedRevenue);
 }
 
-
-
-// Load quiz questions - UPDATED to use fetch API
+// Load quiz questions
 function loadQuestions() {
   fetch(`${API_URL}?action=getQuizQuestions`)
     .then(response => response.json())
@@ -173,9 +160,6 @@ function loadQuestions() {
       handleError(error);
     });
 }
-
-
-
 
 // Start the assessment
 function startAssessment() {
@@ -202,15 +186,12 @@ function displayQuestion() {
   
   const question = questions[currentQuestionIndex];
   
-  // Update section title
   document.getElementById('section-title').textContent = question.section;
   document.getElementById('question-counter').textContent = 
     `Question ${currentQuestionIndex + 1} of ${questions.length}`;
   
-  // Update question text
   document.getElementById('question-text').textContent = question.text;
   
-  // Update options
   const optionsContainer = document.getElementById('options-container');
   optionsContainer.innerHTML = '';
   
@@ -226,7 +207,6 @@ function displayQuestion() {
     optionsContainer.appendChild(optionDiv);
   });
   
-  // Check if question was already answered
   const existingResponse = responses.find(r => r.questionId === question.id);
   if (existingResponse) {
     const options = optionsContainer.querySelectorAll('.option');
@@ -240,7 +220,6 @@ function displayQuestion() {
     document.getElementById('next-question').disabled = true;
   }
   
-  // Update navigation buttons
   document.getElementById('prev-question').disabled = currentQuestionIndex === 0;
   
   if (currentQuestionIndex === questions.length - 1) {
@@ -249,22 +228,18 @@ function displayQuestion() {
     document.getElementById('next-question').textContent = 'Next';
   }
   
-  // Update progress
   const progress = 25 + (currentQuestionIndex / questions.length * 65);
   updateProgress(progress);
 }
 
 // Handle option selection
 function selectOption(option, optionDiv) {
-  // Clear previous selection
   document.querySelectorAll('.option').forEach(opt => {
     opt.classList.remove('selected');
   });
   
-  // Select this option
   optionDiv.classList.add('selected');
   
-  // Store response
   const question = questions[currentQuestionIndex];
   const existingIndex = responses.findIndex(r => r.questionId === question.id);
   
@@ -282,7 +257,6 @@ function selectOption(option, optionDiv) {
     responses.push(response);
   }
   
-  // Enable next button
   document.getElementById('next-question').disabled = false;
 }
 
@@ -304,9 +278,7 @@ function previousQuestion() {
   }
 }
 
-// Calculate and display results - UPDATED to use fetch API
-
-
+// Calculate and display results
 function calculateResults() {
   if (responses.length < questions.length) {
     alert('Please answer all questions before seeing results.');
@@ -315,7 +287,6 @@ function calculateResults() {
   
   showLoading('Analyzing your profit leaks...');
   
-  // Convert to GET request to avoid CORS issues
   const params = new URLSearchParams({
     action: 'calculateLeakage',
     industry: selectedIndustry,
@@ -326,7 +297,10 @@ function calculateResults() {
   
   fetch(API_URL + '?' + params.toString())
     .then(response => response.json())
-    .then(result => displayResults(result))
+    .then(result => {
+      currentResults = result; // Store results globally
+      displayResults(result);
+    })
     .catch(error => {
       console.error('Error calculating results:', error);
       hideLoading();
@@ -387,7 +361,6 @@ function displayResults(result) {
     const leakDiv = document.createElement('div');
     leakDiv.className = 'leak-item';
     
-    // Determine severity class
     let severityClass = 'low';
     if (leak.leakagePercent > 5) severityClass = 'medium';
     if (leak.leakagePercent > 10) severityClass = 'high';
@@ -408,11 +381,10 @@ function displayResults(result) {
     breakdownContainer.appendChild(leakDiv);
   });
   
-  
   // Add email capture modal after showing results
   setTimeout(() => {
     showEmailCaptureModal(result);
-  }, 2000); // Show after 2 seconds of viewing results
+  }, 2000);
 }
 
 function formatCurrency(amount) {
@@ -466,14 +438,13 @@ function handleError(error) {
 }
 
 function startOver() {
-  // Reset everything
   selectedIndustry = '';
   selectedRevenue = 0;
   currentQuestionIndex = 0;
   responses = [];
+  currentResults = null;
   generateSessionId();
   
-  // Reset UI
   document.querySelectorAll('.industry-btn').forEach(btn => {
     btn.classList.remove('selected');
   });
@@ -486,16 +457,10 @@ function startOver() {
 }
 
 function requestAudit() {
-  // This would typically integrate with your CRM or booking system
-  alert('Thank you for your interest! This would redirect to your booking page or contact form.');
-  
-  // Example: Redirect to Calendly or contact page
-  // window.open('https://calendly.com/your-calendar', '_blank');
+  window.open('https://calendly.com/mainnov/recovery', '_blank');
 }
 
-
-// Add email capture modal
-// Add email capture modal
+// Enhanced email capture modal
 function showEmailCaptureModal(result) {
   const modal = document.createElement('div');
   modal.className = 'email-capture-modal';
@@ -511,6 +476,7 @@ function showEmailCaptureModal(result) {
       </ul>
       <input type="email" id="report-email" placeholder="Enter your email" value="">
       <button id="send-report-btn">Send My Report</button>
+      <button id="skip-email-btn" style="margin-top: 10px; background: #666;">Continue Without Email</button>
       <p style="font-size: 12px; color: #666; margin-top: 10px;">
         We'll also send you 3 case studies showing how similar businesses recovered their leaks.
       </p>
@@ -518,7 +484,7 @@ function showEmailCaptureModal(result) {
   `;
   document.body.appendChild(modal);
   
-  // Add event listener after modal is added to DOM
+  // Add event listener for sending report
   document.getElementById('send-report-btn').addEventListener('click', function() {
     const email = document.getElementById('report-email').value;
     if (!email || !email.includes('@')) {
@@ -528,9 +494,6 @@ function showEmailCaptureModal(result) {
 
     showLoading('Generating your personalized report...');
 
-    // THIS FETCH CALL IS NOW CORRECTLY INSIDE THE CLICK LISTENER
-    
-    // THIS FETCH CALL IS NOW CORRECTLY INSIDE THE CLICK LISTENER
     fetch(`${API_URL}`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -541,110 +504,136 @@ function showEmailCaptureModal(result) {
       })
     })
     .then(response => {
-        console.log('Response status:', response.status);
-        console.log('Response ok:', response.ok);
-        
-        if (!response.ok) {
-            throw new Error(`Server error: ${response.status}`);
-        }
-        return response.text(); // First get as text to debug
+      console.log('Response status:', response.status);
+      console.log('Response ok:', response.ok);
+      
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+      return response.text();
     })
     .then(text => {
-        console.log('Raw response:', text);
-        try {
-            const data = JSON.parse(text);
-            hideLoading();
+      console.log('Raw response:', text);
+      try {
+        const data = JSON.parse(text);
+        hideLoading();
+        
+        if (data.success) {
+          // Show success message briefly
+          const modal = document.querySelector('.email-capture-modal');
+          if (modal) {
+            modal.innerHTML = `
+              <div class="modal-content">
+                <h2>✓ Report Sent!</h2>
+                <p>Check your email for your personalized profit leak report.</p>
+                <p style="margin-top: 20px;">Redirecting back to your results...</p>
+              </div>
+            `;
             
-            if (data.success) {
-                const modal = document.querySelector('.email-capture-modal');
-                if (modal) {
-                    modal.innerHTML = `
-                      <div class="modal-content">
-                        <h2>✓ Report Sent!</h2>
-                        <p>Check your email for your personalized profit leak report.</p>
-                        <p>Want to discuss your specific situation?</p>
-                        <button onclick="window.open('https://calendly.com/mainnov/recovery')">Book Recovery Call</button>
-                        <button onclick="closeEmailModal()" style="margin-top: 10px; background: #666;">Close</button>
-                      </div>
-                    `;
-                    setTimeout(() => { closeEmailModal(); }, 5000);
-                }
-            } else {
-                throw new Error(data.error || 'Unknown error occurred');
-            }
-        } catch(parseError) {
-            console.error('JSON parse error:', parseError);
-            console.error('Raw text was:', text);
-            throw new Error('Invalid server response');
+            // Close modal and ensure results are visible
+            setTimeout(() => {
+              closeEmailModal();
+              // Make sure results screen is still active
+              hideAllScreens();
+              document.getElementById('results-screen').classList.add('active');
+              // If results were cleared somehow, re-display them
+              if (currentResults) {
+                displayResultsWithoutModal(currentResults);
+              }
+            }, 2000);
+          }
+        } else {
+          throw new Error(data.error || 'Unknown error occurred');
         }
+      } catch(parseError) {
+        console.error('JSON parse error:', parseError);
+        console.error('Raw text was:', text);
+        throw new Error('Invalid server response');
+      }
     })
     .catch(error => {
-        hideLoading();
-        console.error('Complete error details:', error);
-        console.error('Error message:', error.message);
-        console.error('Error stack:', error.stack);
-        alert('Error sending report: ' + error.message + '\nPlease check console for details.');
+      hideLoading();
+      console.error('Complete error details:', error);
+      alert('Error sending report: ' + error.message + '\nPlease check console for details.');
     });
-    
-    
-    .then(response => {
-        // Check if the server responded with an OK status
-        if (!response.ok) {
-            throw new Error(`Server error: ${response.status}`);
-        }
-        return response.json(); // Proceed to parse the JSON
-    })
-    
-}
-
-
-
-/*
-// Send report function
-//function sendDetailedReport(encodedResult) {
-  //const email = document.getElementById('report-email').value;
-  //if (!email || !email.includes('@')) {
-    //alert('Please enter a valid email address');
-    //return;
-  //}
+  });
   
-  const result = JSON.parse(decodeURIComponent(encodedResult));
-  
-  showLoading('Generating your personalized report...');
-  
-  // Send via proxy to Apps Script
-  fetch(`${API_URL}`, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      action: 'sendEmailReport',
-      leadEmail: email,
-      result: result
-    })
-  })
-  .then(response => response.json())
-  .then(data => {
-    hideLoading();
-    if (data.success) {
-      // Replace modal with success message
-      document.querySelector('.email-capture-modal').innerHTML = `
-        <div class="modal-content">
-          <h2>✓ Report Sent!</h2>
-          <p>Check your email for your personalized profit leak report.</p>
-          <p>Want to discuss your specific situation?</p>
-          <button onclick="window.open('https://calendly.com/mainnov/recovery')">
-            Book Recovery Call
-          </button>
-        </div>
-      `;
-    }
-  })
-  .catch(error => {
-    hideLoading();
-    alert('Error sending report. Please try again.');
+  // Add event listener for skipping email
+  document.getElementById('skip-email-btn').addEventListener('click', function() {
+    closeEmailModal();
+    // Ensure results screen remains visible
+    hideAllScreens();
+    document.getElementById('results-screen').classList.add('active');
   });
 }
-*/
+
+// New function to display results without triggering modal again
+function displayResultsWithoutModal(result) {
+  if (result.error) {
+    alert('Error calculating results: ' + result.error);
+    return;
+  }
+  
+  // Update headline
+  document.getElementById('result-industry').textContent = result.industry;
+  document.getElementById('industry-average').textContent = '25-30%';
+  document.getElementById('leak-percentage').textContent = 
+    result.totalLeakagePercent.toFixed(1) + '%';
+  document.getElementById('leak-dollars').textContent = 
+    formatCurrency(result.totalLeakageDollars);
+  
+  // Display top 3 leaks
+  const topLeaksContainer = document.getElementById('top-leaks-container');
+  topLeaksContainer.innerHTML = '';
+  
+  result.topThreeLeaks.forEach((leak, index) => {
+    const leakDiv = document.createElement('div');
+    leakDiv.className = 'leak-item top-leak';
+    leakDiv.innerHTML = `
+      <div class="leak-rank">#${index + 1}</div>
+      <div class="leak-info">
+        <div class="leak-category">${leak.category}</div>
+        <div class="leak-metrics">
+          <span class="leak-percent">${leak.leakagePercent.toFixed(1)}% of revenue</span>
+          <span class="leak-dollar">${formatCurrency(leak.leakageDollars)}</span>
+        </div>
+      </div>
+    `;
+    topLeaksContainer.appendChild(leakDiv);
+  });
+  
+  // Show recovery potential
+  document.getElementById('recovery-dollars').textContent = 
+    formatCurrency(result.potentialRecovery);
+  
+  // Show detailed breakdown
+  const breakdownContainer = document.getElementById('breakdown-container');
+  breakdownContainer.innerHTML = '';
+  
+  result.leaks.forEach(leak => {
+    const leakDiv = document.createElement('div');
+    leakDiv.className = 'leak-item';
+    
+    let severityClass = 'low';
+    if (leak.leakagePercent > 5) severityClass = 'medium';
+    if (leak.leakagePercent > 10) severityClass = 'high';
+    
+    leakDiv.classList.add(severityClass);
+    
+    leakDiv.innerHTML = `
+      <div class="leak-category">${leak.category}</div>
+      <div class="leak-bar-container">
+        <div class="leak-bar" style="width: ${Math.min(leak.leakagePercent * 3, 100)}%"></div>
+      </div>
+      <div class="leak-metrics">
+        <span class="leak-percent">${leak.leakagePercent.toFixed(1)}%</span>
+        <span class="leak-dollar">${formatCurrency(leak.leakageDollars)}</span>
+      </div>
+    `;
+    
+    breakdownContainer.appendChild(leakDiv);
+  });
+}
 
 // Function to close email modal
 function closeEmailModal() {
