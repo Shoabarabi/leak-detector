@@ -476,7 +476,6 @@ function showEmailCaptureModal(result) {
       </ul>
       <input type="email" id="report-email" placeholder="Enter your email" value="">
       <button id="send-report-btn">Send My Report</button>
-      <button id="skip-email-btn" style="margin-top: 10px; background: #666;">Continue Without Email</button>
       <p style="font-size: 12px; color: #666; margin-top: 10px;">
         We'll also send you 3 case studies showing how similar businesses recovered their leaks.
       </p>
@@ -559,12 +558,12 @@ function showEmailCaptureModal(result) {
   });
   
   // Add event listener for skipping email
-  document.getElementById('skip-email-btn').addEventListener('click', function() {
+  /*document.getElementById('skip-email-btn').addEventListener('click', function() {
     closeEmailModal();
     // Ensure results screen remains visible
     hideAllScreens();
     document.getElementById('results-screen').classList.add('active');
-  });
+  });*/
 }
 
 // New function to display results without triggering modal again
