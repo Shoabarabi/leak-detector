@@ -93,13 +93,14 @@
             <div class="results-header">
                 <h2>Your Profit Leak Analysis</h2>
                 
-                <div class="headline-result">
+                
+                <div class="headline-result" style="background: transparent; padding: 0;"></div>
                     <p class="industry-benchmark">
                         Best practice <span id="summary-industry">your industry</span> companies typically leak around <span style="color: #00FFFF; font-weight: 700;">10%</span> of revenue.
                     </p>
 
                     <!-- Chart and Stats Container -->
-                    <div style="display: flex; justify-content: center; align-items: center; gap: 40px; margin: 30px 0;">
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 40px; margin: 20px 0;">
                         <!-- Pie Chart Container -->
                         <div class="pie-chart-container">
                             <canvas id="leak-pie-chart" width="200" height="200"></canvas>
@@ -108,10 +109,10 @@
                         <!-- Stats on the right -->
                         <div style="text-align: left;">
                             <div id="summary-leak-dollars" style="font-size: 2.5em; font-weight: 700; color: #00FFFF; text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);">$0</div>
-                            <div style="font-size: 0.9em; color: #888; margin-top: 5px;">revenue recovery potential</div>
+                            <div style="font-size: 1em; color: #cccccc; margin-top: 5px;">revenue recovery potential</div>
                             <div style="margin-top: 15px;">
                                 <span id="summary-leak-percentage-text" style="font-size: 1.3em; color: #00FFFF; font-weight: 600;">0%</span>
-                                <span style="color: #888; font-size: 1em;"> currently leaking</span>
+                                <span style="color: #cccccc; font-size: 1em;"> currently leaking</span>
                             </div>
                         </div>
                     </div>
@@ -119,7 +120,7 @@
                     
                     
                     <!-- Biggest Opportunity Only -->
-                    <div class="biggest-opportunity" style="margin-top: 40px;">
+                    <div class="biggest-opportunity" style="margin-bottom: 40px;">
                         <h3>Your Biggest Opportunity:</h3>
                         <div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 25px; border-left: 4px solid #00FFFF;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
