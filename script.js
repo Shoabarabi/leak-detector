@@ -390,18 +390,26 @@ function drawPieChart(leakPercentage) {
   ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
   ctx.fill();
   
-  // Draw leak ring (red)
+  
   // Draw leak ring (red) with glow
+  
+  ctx.shadowColor = '#e74c3c';
+  ctx.shadowBlur = 25;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
   ctx.beginPath();
   ctx.arc(centerX, centerY, outerRadius, -Math.PI/2, -Math.PI/2 + leakAngle);
   ctx.arc(centerX, centerY, innerRadius, -Math.PI/2 + leakAngle, -Math.PI/2, true);
   ctx.closePath();
-  ctx.shadowColor = '#e74c3c';
-  ctx.shadowBlur = 20;
   ctx.fillStyle = '#e74c3c';
   ctx.fill();
   ctx.shadowBlur = 0; // Reset shadow for next drawings
 
+
+
+
+
+  
 
 
   
