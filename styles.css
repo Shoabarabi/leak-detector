@@ -314,6 +314,11 @@ body {
     font-weight: 600;
 }
 
+#best-practice-percentage {
+    color: #00FFFF;
+    font-weight: 700;
+}
+
 .your-result h3 {
     color: #00FFFF;
     margin-bottom: 15px;
