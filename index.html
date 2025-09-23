@@ -95,7 +95,7 @@
                 
                 <div class="headline-result">
                     <p class="industry-benchmark">
-                        Best practice <span id="summary-industry">your industry</span> companies typically leak around <span id="summary-best-practice">10%</span> of revenue.
+                        Best practice <span id="summary-industry">your industry</span> companies typically leak around <span style="color: #00FFFF; font-weight: 700;">10%</span> of revenue.
                     </p>
                     
                     <!-- Pie Chart Container -->
@@ -103,21 +103,20 @@
                         <canvas id="leak-pie-chart" width="200" height="200"></canvas>
                     </div>
                     
-                    <!-- Total Leak Amount -->
-                    <div class="leak-amount">
-                        <span id="summary-leak-percentage">0%</span>
-                        <span class="separator">•</span>
-                        <span id="summary-leak-dollars">$0</span>
+                    <!-- Total Leak Amount - styled like full results -->
+                    <div class="leak-amount" style="margin-top: 20px;">
+                        <span id="summary-leak-percentage" style="display: none;">0%</span>
+                        <span id="summary-leak-dollars" style="font-size: 2.5em; font-weight: 700; color: #e74c3c;">$0</span>
                     </div>
                     
                     <!-- Biggest Opportunity Only -->
-                    <div class="biggest-opportunity">
+                    <div class="biggest-opportunity" style="margin-top: 40px;">
                         <h3>Your Biggest Opportunity:</h3>
-                        <div class="leak-item top-leak">
+                        <div class="leak-item top-leak" style="border-left: 4px solid #00FFFF; padding: 20px;">
                             <div class="leak-info">
-                                <div id="biggest-leak-category" class="leak-category">Loading...</div>
-                                <div class="leak-metrics">
-                                    <span id="biggest-leak-dollar" class="leak-dollar">$0</span>
+                                <div id="biggest-leak-category" class="leak-category" style="font-size: 1.2em; font-weight: 600; color: #ffffff;">Loading...</div>
+                                <div class="leak-metrics" style="margin-top: 10px;">
+                                    <span id="biggest-leak-dollar" class="leak-dollar" style="font-size: 1.8em; font-weight: 700; color: #00FFFF;">$0</span>
                                 </div>
                             </div>
                         </div>
@@ -125,14 +124,22 @@
                 </div>
                 
                 <!-- Email Capture Section -->
-                <div class="email-section">
+                <div class="email-section" style="margin-top: 40px; text-align: center;">
                     <h3>Get Your Complete Profit Leak Report</h3>
-                    <p>See all leaks, recovery potential, and your 90-day action plan</p>
-                    <input type="email" id="inline-report-email" placeholder="Enter your email">
-                    <button id="inline-send-report-btn" class="btn-primary">Get Full Report</button>
+                    <p style="color: #cccccc;">See all leaks, recovery potential, and your 90-day action plan</p>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                        <input type="email" id="inline-report-email" placeholder="Enter your email" style="flex: 1; max-width: 300px; padding: 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(0, 255, 255, 0.3); color: #ffffff; border-radius: 12px; font-size: 1em;">
+                        <button id="inline-send-report-btn" class="btn-primary" style="padding: 15px 30px;">Get Full Report</button>
+                    </div>
                 </div>
             </div>
         </div>
+
+
+
+
+
+        
 
         <!-- Results Screen -->
         <div id="results-screen" class="screen">

@@ -327,8 +327,9 @@ function displayResults(result) {
   
   // Populate summary data
   document.getElementById('summary-industry').textContent = result.industry;
-  document.getElementById('summary-leak-percentage').textContent = 
-    result.totalLeakagePercent.toFixed(1) + '%';
+  // Don't show percentage separately since it's in the pie chart
+  //document.getElementById('summary-leak-percentage').textContent = 
+  //  result.totalLeakagePercent.toFixed(1) + '%';
   document.getElementById('summary-leak-dollars').textContent = 
     formatCurrency(result.totalLeakageDollars);
   
@@ -364,8 +365,6 @@ function formatCurrency(amount) {
   }
 }
 
-
-// Draw pie chart for summary
 function drawPieChart(leakPercentage) {
   const canvas = document.getElementById('leak-pie-chart');
   if (!canvas) return;
@@ -381,15 +380,7 @@ function drawPieChart(leakPercentage) {
   // Convert percentage to radians
   const leakAngle = (leakPercentage / 100) * 2 * Math.PI;
   
-  // Draw leak portion (red)
-  ctx.beginPath();
-  ctx.moveTo(centerX, centerY);
-  ctx.arc(centerX, centerY, radius, -Math.PI/2, -Math.PI/2 + leakAngle);
-  ctx.closePath();
-  ctx.fillStyle = '#e74c3c';
-  ctx.fill();
-  
-  // Draw healthy portion (green)
+  // Draw healthy portion (green) FIRST
   ctx.beginPath();
   ctx.moveTo(centerX, centerY);
   ctx.arc(centerX, centerY, radius, -Math.PI/2 + leakAngle, Math.PI * 1.5);
@@ -397,20 +388,32 @@ function drawPieChart(leakPercentage) {
   ctx.fillStyle = '#27ae60';
   ctx.fill();
   
-  // Draw border
+  // Draw leak portion (red) on top
+  ctx.beginPath();
+  ctx.moveTo(centerX, centerY);
+  ctx.arc(centerX, centerY, radius, -Math.PI/2, -Math.PI/2 + leakAngle);
+  ctx.closePath();
+  ctx.fillStyle = '#e74c3c';
+  ctx.fill();
+  
+  // Draw white border
   ctx.beginPath();
   ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-  ctx.strokeStyle = '#fff';
+  ctx.strokeStyle = '#ffffff';
   ctx.lineWidth = 3;
   ctx.stroke();
   
   // Draw percentage text in center
-  ctx.fillStyle = '#fff';
-  ctx.font = 'bold 24px Arial';
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 28px Arial';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText(leakPercentage.toFixed(1) + '%', centerX, centerY);
 }
+
+
+
+
 
 // Handle inline email submission
 function handleInlineEmailSubmit(result) {
