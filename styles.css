@@ -97,6 +97,13 @@ body {
     display: block;
 }
 
+/* Remove background from result summary screen */
+#result-summary-screen {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
 /* Industry Selection */
 #industry-selection h2,
 #revenue-input h2,
