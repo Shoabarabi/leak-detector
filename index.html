@@ -88,6 +88,52 @@
             </div>
         </div>
 
+        <!-- Result Summary Screen (Before Email) -->
+        <div id="result-summary-screen" class="screen">
+            <div class="results-header">
+                <h2>Your Profit Leak Analysis</h2>
+                
+                <div class="headline-result">
+                    <p class="industry-benchmark">
+                        Best practice <span id="summary-industry">your industry</span> companies typically leak around <span id="summary-best-practice">10%</span> of revenue.
+                    </p>
+                    
+                    <!-- Pie Chart Container -->
+                    <div class="pie-chart-container">
+                        <canvas id="leak-pie-chart" width="200" height="200"></canvas>
+                    </div>
+                    
+                    <!-- Total Leak Amount -->
+                    <div class="leak-amount">
+                        <span id="summary-leak-percentage">0%</span>
+                        <span class="separator">•</span>
+                        <span id="summary-leak-dollars">$0</span>
+                    </div>
+                    
+                    <!-- Biggest Opportunity Only -->
+                    <div class="biggest-opportunity">
+                        <h3>Your Biggest Opportunity:</h3>
+                        <div class="leak-item top-leak">
+                            <div class="leak-info">
+                                <div id="biggest-leak-category" class="leak-category">Loading...</div>
+                                <div class="leak-metrics">
+                                    <span id="biggest-leak-dollar" class="leak-dollar">$0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Email Capture Section -->
+                <div class="email-section">
+                    <h3>Get Your Complete Profit Leak Report</h3>
+                    <p>See all leaks, recovery potential, and your 90-day action plan</p>
+                    <input type="email" id="inline-report-email" placeholder="Enter your email">
+                    <button id="inline-send-report-btn" class="btn-primary">Get Full Report</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Results Screen -->
         <div id="results-screen" class="screen">
             <div class="results-header">

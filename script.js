@@ -308,7 +308,7 @@ function calculateResults() {
     });
 }
 
-// Display results
+// Display results - NOW SHOWS SUMMARY FIRST
 function displayResults(result) {
   hideLoading();
   
@@ -317,13 +317,142 @@ function displayResults(result) {
     return;
   }
   
+  // Store results globally
+  currentResults = result;
+  
+  // Show SUMMARY screen first (not full results)
   hideAllScreens();
-  document.getElementById('results-screen').classList.add('active');
+  document.getElementById('result-summary-screen').classList.add('active');
   updateProgress(100);
   
+  // Populate summary data
+  document.getElementById('summary-industry').textContent = result.industry;
+  document.getElementById('summary-leak-percentage').textContent = 
+    result.totalLeakagePercent.toFixed(1) + '%';
+  document.getElementById('summary-leak-dollars').textContent = 
+    formatCurrency(result.totalLeakageDollars);
+  
+  // Show biggest opportunity only
+  if (result.topThreeLeaks && result.topThreeLeaks[0]) {
+    document.getElementById('biggest-leak-category').textContent = result.topThreeLeaks[0].category;
+    document.getElementById('biggest-leak-dollar').textContent = 
+      formatCurrency(result.topThreeLeaks[0].leakageDollars);
+  }
+  
+  // Draw pie chart
+  drawPieChart(result.totalLeakagePercent);
+  
+  // Add inline email handler
+  document.getElementById('inline-send-report-btn').addEventListener('click', function() {
+    handleInlineEmailSubmit(result);
+  });
+  
+  // Don't show modal anymore - email is inline
+  // No setTimeout for modal
+}
+
+
+  
+
+function formatCurrency(amount) {
+  if (amount >= 1000000) {
+    return '$' + (amount / 1000000).toFixed(1) + 'M';
+  } else if (amount >= 1000) {
+    return '$' + Math.round(amount / 1000) + 'K';
+  } else {
+    return '$' + Math.round(amount);
+  }
+}
+
+
+// Draw pie chart for summary
+function drawPieChart(leakPercentage) {
+  const canvas = document.getElementById('leak-pie-chart');
+  if (!canvas) return;
+  
+  const ctx = canvas.getContext('2d');
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2;
+  const radius = 80;
+  
+  // Clear canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // Convert percentage to radians
+  const leakAngle = (leakPercentage / 100) * 2 * Math.PI;
+  
+  // Draw leak portion (red)
+  ctx.beginPath();
+  ctx.moveTo(centerX, centerY);
+  ctx.arc(centerX, centerY, radius, -Math.PI/2, -Math.PI/2 + leakAngle);
+  ctx.closePath();
+  ctx.fillStyle = '#e74c3c';
+  ctx.fill();
+  
+  // Draw healthy portion (green)
+  ctx.beginPath();
+  ctx.moveTo(centerX, centerY);
+  ctx.arc(centerX, centerY, radius, -Math.PI/2 + leakAngle, Math.PI * 1.5);
+  ctx.closePath();
+  ctx.fillStyle = '#27ae60';
+  ctx.fill();
+  
+  // Draw border
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  
+  // Draw percentage text in center
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 24px Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(leakPercentage.toFixed(1) + '%', centerX, centerY);
+}
+
+// Handle inline email submission
+function handleInlineEmailSubmit(result) {
+  const email = document.getElementById('inline-report-email').value;
+  if (!email || !email.includes('@')) {
+    alert('Please enter a valid email address');
+    return;
+  }
+
+  showLoading('Generating your personalized report...');
+
+  fetch(`${API_URL}`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      action: 'sendEmailReport',
+      leadEmail: email,
+      result: result
+    })
+  })
+  .then(response => response.text())
+  .then(text => {
+    const data = JSON.parse(text);
+    hideLoading();
+    
+    if (data.success) {
+      // Now show the FULL results
+      hideAllScreens();
+      document.getElementById('results-screen').classList.add('active');
+      displayFullResults(currentResults);
+    }
+  })
+  .catch(error => {
+    hideLoading();
+    alert('Error sending report: ' + error.message);
+  });
+}
+
+// Display full results after email
+function displayFullResults(result) {
   // Update headline
   document.getElementById('result-industry').textContent = result.industry;
-  /*document.getElementById('industry-average').textContent = '25-30%';*/
   document.getElementById('leak-percentage').textContent = 
     result.totalLeakagePercent.toFixed(1) + '%';
   document.getElementById('leak-dollars').textContent = 
@@ -361,12 +490,6 @@ function displayResults(result) {
     const leakDiv = document.createElement('div');
     leakDiv.className = 'leak-item';
     
-    let severityClass = 'low';
-    if (leak.leakagePercent > 5) severityClass = 'medium';
-    if (leak.leakagePercent > 10) severityClass = 'high';
-    
-    leakDiv.classList.add(severityClass);
-    
     leakDiv.innerHTML = `
       <div class="leak-category">${leak.category}</div>
       <div class="leak-bar-container">
@@ -381,20 +504,7 @@ function displayResults(result) {
     breakdownContainer.appendChild(leakDiv);
   });
   
-  // Add email capture modal after showing results
-  setTimeout(() => {
-    showEmailCaptureModal(result);
-  }, 2000);
-}
-
-function formatCurrency(amount) {
-  if (amount >= 1000000) {
-    return '$' + (amount / 1000000).toFixed(1) + 'M';
-  } else if (amount >= 1000) {
-    return '$' + Math.round(amount / 1000) + 'K';
-  } else {
-    return '$' + Math.round(amount);
-  }
+  // No email modal - user already provided email
 }
 
 // Update progress bar
@@ -461,7 +571,7 @@ function requestAudit() {
 }
 
 // Enhanced email capture modal
-function showEmailCaptureModal(result) {
+/*function showEmailCaptureModal(result) {
   const modal = document.createElement('div');
   modal.className = 'email-capture-modal';
   modal.innerHTML = `
@@ -564,7 +674,7 @@ function showEmailCaptureModal(result) {
     hideAllScreens();
     document.getElementById('results-screen').classList.add('active');
   });*/
-}
+
 
 // New function to display results without triggering modal again
 function displayResultsWithoutModal(result) {
