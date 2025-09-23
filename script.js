@@ -575,7 +575,7 @@ function displayResultsWithoutModal(result) {
   
   // Update headline
   document.getElementById('result-industry').textContent = result.industry;
-  document.getElementById('industry-average').textContent = '25-30%';
+  /*document.getElementById('industry-average').textContent = '25-30%';*/
   document.getElementById('leak-percentage').textContent = 
     result.totalLeakagePercent.toFixed(1) + '%';
   document.getElementById('leak-dollars').textContent = 
