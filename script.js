@@ -372,7 +372,8 @@ function drawPieChart(leakPercentage) {
   const ctx = canvas.getContext('2d');
   const centerX = canvas.width / 2;
   const centerY = canvas.height / 2;
-  const radius = 80;
+  const outerRadius = 90;
+  const innerRadius = 75; // Creates the donut hole
   
   // Clear canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -380,36 +381,35 @@ function drawPieChart(leakPercentage) {
   // Convert percentage to radians
   const leakAngle = (leakPercentage / 100) * 2 * Math.PI;
   
-  // Draw healthy portion (green) FIRST
+  // Draw background ring (darker cyan/gray)
   ctx.beginPath();
-  ctx.moveTo(centerX, centerY);
-  ctx.arc(centerX, centerY, radius, -Math.PI/2 + leakAngle, Math.PI * 1.5);
-  ctx.closePath();
-  ctx.fillStyle = '#27ae60';
+  ctx.arc(centerX, centerY, outerRadius, 0, 2 * Math.PI);
+  ctx.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI, true);
+  ctx.fillStyle = 'rgba(0, 255, 255, 0.1)';
   ctx.fill();
   
-  // Draw leak portion (red) on top
+  // Draw progress ring (bright cyan)
   ctx.beginPath();
-  ctx.moveTo(centerX, centerY);
-  ctx.arc(centerX, centerY, radius, -Math.PI/2, -Math.PI/2 + leakAngle);
+  ctx.arc(centerX, centerY, outerRadius, -Math.PI/2, -Math.PI/2 + leakAngle);
+  ctx.arc(centerX, centerY, innerRadius, -Math.PI/2 + leakAngle, -Math.PI/2, true);
   ctx.closePath();
-  ctx.fillStyle = '#e74c3c';
+  ctx.fillStyle = '#00FFFF';
   ctx.fill();
   
-  // Draw white border
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-  ctx.strokeStyle = '#ffffff';
-  ctx.lineWidth = 3;
-  ctx.stroke();
-  
-  // Draw percentage text in center
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 28px Arial';
+  // Draw text in center
+  ctx.fillStyle = '#00FFFF';
+  ctx.font = 'bold 36px Arial';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText(leakPercentage.toFixed(1) + '%', centerX, centerY);
+  ctx.fillText(Math.round(leakPercentage), centerX, centerY - 10);
+  
+  // Draw "/100" below
+  ctx.font = '16px Arial';
+  ctx.fillStyle = '#888888';
+  ctx.fillText('/100', centerX, centerY + 15);
 }
+
+
 
 
 
