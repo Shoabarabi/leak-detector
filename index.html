@@ -97,29 +97,37 @@
                     <p class="industry-benchmark">
                         Best practice <span id="summary-industry">your industry</span> companies typically leak around <span style="color: #00FFFF; font-weight: 700;">10%</span> of revenue.
                     </p>
-                    
-                    <!-- Pie Chart Container -->
-                    <div class="pie-chart-container">
-                        <canvas id="leak-pie-chart" width="200" height="200"></canvas>
+
+                    <!-- Chart and Stats Container -->
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 40px; margin: 30px 0;">
+                        <!-- Pie Chart Container -->
+                        <div class="pie-chart-container">
+                            <canvas id="leak-pie-chart" width="200" height="200"></canvas>
+                        </div>
+                        
+                        <!-- Stats on the right -->
+                        <div style="text-align: left;">
+                            <div id="summary-leak-dollars" style="font-size: 2.5em; font-weight: 700; color: #00FFFF; text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);">$0</div>
+                            <div style="font-size: 0.9em; color: #888; margin-top: 5px;">revenue recovery potential</div>
+                            <div style="margin-top: 15px;">
+                                <span id="summary-leak-percentage-text" style="font-size: 1.3em; color: #00FFFF; font-weight: 600;">0%</span>
+                                <span style="color: #888; font-size: 1em;"> currently leaking</span>
+                            </div>
+                        </div>
                     </div>
                     
-                    <!-- Total Leak Amount - styled like full results -->
-                    <div class="leak-amount" style="margin-top: 20px;">
-                        <span id="summary-leak-percentage" style="display: none;">0%</span>
-                        <span id="summary-leak-dollars" style="font-size: 2.5em; font-weight: 700; color: #e74c3c;">$0</span>
-                    </div>
+                    
                     
                     <!-- Biggest Opportunity Only -->
                     <div class="biggest-opportunity" style="margin-top: 40px;">
                         <h3>Your Biggest Opportunity:</h3>
-                        <div class="leak-item top-leak" style="border-left: 4px solid #00FFFF; padding: 20px;">
-                            <div class="leak-info">
-                                <div id="biggest-leak-category" class="leak-category" style="font-size: 1.2em; font-weight: 600; color: #ffffff;">Loading...</div>
-                                <div class="leak-metrics" style="margin-top: 10px;">
-                                    <span id="biggest-leak-dollar" class="leak-dollar" style="font-size: 1.8em; font-weight: 700; color: #00FFFF;">$0</span>
-                                </div>
+                        <div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 25px; border-left: 4px solid #00FFFF;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div id="biggest-leak-category" style="font-size: 1.1em; color: #ffffff;">Loading...</div>
+                                <div id="biggest-leak-dollar" style="font-size: 1.5em; font-weight: 700; color: #00FFFF;">$0</div>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
                 

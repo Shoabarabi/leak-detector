@@ -332,6 +332,8 @@ function displayResults(result) {
   //  result.totalLeakagePercent.toFixed(1) + '%';
   document.getElementById('summary-leak-dollars').textContent = 
     formatCurrency(result.totalLeakageDollars);
+  document.getElementById('summary-leak-percentage-text').textContent = 
+  result.totalLeakagePercent.toFixed(1) + '%';
   
   // Show biggest opportunity only
   if (result.topThreeLeaks && result.topThreeLeaks[0]) {
@@ -373,7 +375,7 @@ function drawPieChart(leakPercentage) {
   const centerX = canvas.width / 2;
   const centerY = canvas.height / 2;
   const outerRadius = 90;
-  const innerRadius = 75; // Creates the donut hole
+  const innerRadius = 75;
   
   // Clear canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -381,32 +383,27 @@ function drawPieChart(leakPercentage) {
   // Convert percentage to radians
   const leakAngle = (leakPercentage / 100) * 2 * Math.PI;
   
-  // Draw background ring (darker cyan/gray)
+  // Draw background ring (darker gray)
   ctx.beginPath();
   ctx.arc(centerX, centerY, outerRadius, 0, 2 * Math.PI);
   ctx.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI, true);
-  ctx.fillStyle = 'rgba(0, 255, 255, 0.1)';
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
   ctx.fill();
   
-  // Draw progress ring (bright cyan)
+  // Draw leak ring (red)
   ctx.beginPath();
   ctx.arc(centerX, centerY, outerRadius, -Math.PI/2, -Math.PI/2 + leakAngle);
   ctx.arc(centerX, centerY, innerRadius, -Math.PI/2 + leakAngle, -Math.PI/2, true);
   ctx.closePath();
-  ctx.fillStyle = '#00FFFF';
+  ctx.fillStyle = '#e74c3c';
   ctx.fill();
   
-  // Draw text in center
-  ctx.fillStyle = '#00FFFF';
+  // Draw percentage text in center
+  ctx.fillStyle = '#e74c3c';
   ctx.font = 'bold 36px Arial';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText(Math.round(leakPercentage), centerX, centerY - 10);
-  
-  // Draw "/100" below
-  ctx.font = '16px Arial';
-  ctx.fillStyle = '#888888';
-  ctx.fillText('/100', centerX, centerY + 15);
+  ctx.fillText(leakPercentage.toFixed(1) + '%', centerX, centerY);
 }
 
 
