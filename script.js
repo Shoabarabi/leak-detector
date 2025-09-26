@@ -398,6 +398,13 @@ function displayResults(result) {
   // Show SUMMARY screen first (not full results)
   hideAllScreens();
   document.getElementById('result-summary-screen').classList.add('active');
+  // Pre-fill email if we have it from URL
+  if (userData.email) {
+    const emailInput = document.getElementById('inline-report-email');
+    if (emailInput) {
+      emailInput.value = userData.email;
+    }
+  }
   updateProgress(100);
   
   // Populate summary data
