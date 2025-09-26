@@ -28,12 +28,11 @@ const userData = {
 };
 
 // Initialize the application
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
   console.log('Business Profit Leak Diagnostic initialized');
   console.log('User data from URL:', userData);
   
   generateSessionId();
-  loadQuestions();
   
   // Check if we have the required data from URL
   if (userData.industry && userData.revenue > 0) {
@@ -44,17 +43,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Hide industry and revenue screens
     hideAllScreens();
     
-    // Start assessment directly
-    setTimeout(() => {
-      startAssessmentDirectly();
-    }, 500); // Small delay to ensure questions are loaded
+    // Wait for questions to load BEFORE starting assessment
+    await loadQuestions();
+    console.log('Questions loaded, now starting assessment');
+    
+    // Start assessment directly (no timeout needed now)
+    startAssessmentDirectly();
   } else {
     // Normal flow if no URL parameters
     loadIndustries();
+    loadQuestions();
   }
 });
-
-
 
 
 
@@ -190,17 +190,19 @@ function useCustomRevenue() {
 
 // Load quiz questions
 function loadQuestions() {
-  fetch(`${API_URL}?action=getQuizQuestions`)
+  return fetch(`${API_URL}?action=getQuizQuestions`)
     .then(response => response.json())
     .then(data => {
       questions = data;
       console.log('Loaded', questions.length, 'questions');
+      return data; // Add this line
     })
     .catch(error => {
       console.error('Error loading questions:', error);
       handleError(error);
     });
 }
+
 
 // Start the assessment
 function startAssessment() {
