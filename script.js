@@ -10,13 +10,54 @@ let currentResults = null; // Store results globally for reuse
 // API Configuration
 const API_URL = 'https://leakdetector.mainnov.tech/proxy.php';
 
+// NEW: Capture URL parameters immediately
+const urlParams = new URLSearchParams(window.location.search);
+const nameFromURL = urlParams.get('name') || '';
+const companyFromURL = urlParams.get('company') || '';
+const industryFromURL = urlParams.get('industry') || '';
+const revenueFromURL = parseFloat(urlParams.get('revenue')) || 0;
+const emailFromURL = urlParams.get('email') || '';
+
+// Store these in a global object for easy access
+const userData = {
+  name: nameFromURL,
+  company: companyFromURL,
+  industry: industryFromURL,
+  revenue: revenueFromURL * 1000000, // Convert from millions to actual amount
+  email: emailFromURL
+};
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
   console.log('Business Profit Leak Diagnostic initialized');
+  console.log('User data from URL:', userData);
+  
   generateSessionId();
-  loadIndustries();
   loadQuestions();
+  
+  // Check if we have the required data from URL
+  if (userData.industry && userData.revenue > 0) {
+    // Skip directly to quiz
+    selectedIndustry = userData.industry;
+    selectedRevenue = userData.revenue;
+    
+    // Hide industry and revenue screens
+    hideAllScreens();
+    
+    // Start assessment directly
+    setTimeout(() => {
+      startAssessmentDirectly();
+    }, 500); // Small delay to ensure questions are loaded
+  } else {
+    // Normal flow if no URL parameters
+    loadIndustries();
+  }
 });
+
+
+
+
+
 
 // Generate unique session ID
 function generateSessionId() {
@@ -177,6 +218,27 @@ function startAssessment() {
   displayQuestion();
 }
 
+function startAssessmentDirectly() {
+  console.log('Starting assessment with:', selectedIndustry, selectedRevenue);
+  
+  currentQuestionIndex = 0;
+  responses = [];
+  
+  hideAllScreens();
+  document.getElementById('quiz-screen').classList.add('active');
+  updateProgress(25);
+  
+  // Update header to show personalized greeting
+  const header = document.querySelector('.header h1');
+  if (header && userData.name) {
+    header.textContent = `${userData.name}'s Revenue Leak Analysis`;
+  }
+  
+  displayQuestion();
+}
+
+
+
 // Display current question
 function displayQuestion() {
   if (currentQuestionIndex >= questions.length) {
@@ -292,7 +354,10 @@ function calculateResults() {
     industry: selectedIndustry,
     revenue: selectedRevenue,
     sessionId: sessionId,
-    responses: JSON.stringify(responses)
+    responses: JSON.stringify(responses),
+    name: userData.name,
+    company: userData.company,
+    email: userData.email
   });
   
   fetch(API_URL + '?' + params.toString())
@@ -315,6 +380,14 @@ function displayResults(result) {
   if (result.error) {
     alert('Error calculating results: ' + result.error);
     return;
+  }
+
+  // Personalize the headline if we have user data
+  if (userData.name && userData.company) {
+    const headline = document.querySelector('.results-header h2');
+    if (headline) {
+      headline.textContent = `${userData.name}, Your ${userData.company} Profit Leak Analysis`;
+    }
   }
   
   // Store results globally
@@ -422,15 +495,18 @@ function drawPieChart(leakPercentage) {
   ctx.fillText(leakPercentage.toFixed(1) + '%', centerX, centerY);
 }
 
-
-
-
-
-
-
 // Handle inline email submission
 function handleInlineEmailSubmit(result) {
-  const email = document.getElementById('inline-report-email').value;
+  // First try to get email from the input field
+  let email = document.getElementById('inline-report-email').value;
+  
+  // If field is empty and we have email from URL, use and pre-fill it
+  if (!email && userData.email) {
+    email = userData.email;
+    document.getElementById('inline-report-email').value = email;
+  }
+  
+  // Validate email
   if (!email || !email.includes('@')) {
     alert('Please enter a valid email address');
     return;
@@ -464,6 +540,11 @@ function handleInlineEmailSubmit(result) {
     alert('Error sending report: ' + error.message);
   });
 }
+
+
+
+
+
 
 // Display full results after email
 function displayFullResults(result) {
