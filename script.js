@@ -398,6 +398,12 @@ function displayResults(result) {
   // Show SUMMARY screen first (not full results)
   hideAllScreens();
   document.getElementById('result-summary-screen').classList.add('active');
+  
+  // Hide subtitle text on results page to save vertical space
+  const headerSubtitle = document.querySelector('.subtitle');
+  if (headerSubtitle) {
+    headerSubtitle.style.display = 'none';
+  }
   // Pre-fill email if we have it from URL
   if (userData.email) {
     const emailInput = document.getElementById('inline-report-email');
@@ -660,7 +666,14 @@ function startOver() {
   responses = [];
   currentResults = null;
   generateSessionId();
-  
+
+  // Show subtitle again when restarting
+  const headerSubtitle = document.querySelector('.subtitle');
+  if (headerSubtitle) {
+    headerSubtitle.style.display = 'block';
+  }
+
+ 
   document.querySelectorAll('.industry-btn').forEach(btn => {
     btn.classList.remove('selected');
   });
