@@ -46,6 +46,12 @@ if ($action === 'calculateLeakage') {
     $url .= '&revenue=' . urlencode($_GET['revenue']);
     $url .= '&sessionId=' . urlencode($_GET['sessionId']);
     $url .= '&responses=' . urlencode($_GET['responses']);
+    $url .= '&name=' . urlencode($_GET['name']);        // ADD THIS
+    $url .= '&company=' . urlencode($_GET['company']);  // ADD THIS
+    $url .= '&email=' . urlencode($_GET['email']);      // ADD THIS
+
+
+
 }
 
 // Use cURL for GET requests
