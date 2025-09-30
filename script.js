@@ -374,6 +374,13 @@ function calculateResults() {
     alert('Please answer all questions before seeing results.');
     return;
   }
+
+  // ADD THIS DEBUG LINE
+  console.log('Sending to backend:', {
+    name: userData.name,
+    company: userData.company,
+    email: userData.email
+  });
   
   showLoading('Analyzing your profit leaks...');
   
