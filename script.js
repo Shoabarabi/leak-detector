@@ -188,7 +188,33 @@ function useCustomRevenue() {
   console.log('Custom revenue:', selectedRevenue);
 }
 
+function loadQuestions() {
+    // Check sessionStorage first
+    const cachedQuestions = sessionStorage.getItem('quizQuestions');
+    if (cachedQuestions) {
+        questions = JSON.parse(cachedQuestions);
+        console.log('Loaded', questions.length, 'questions from cache');
+        return Promise.resolve(questions);
+    }
+    
+    // Fall back to API if no cache
+    return fetch(`${API_URL}?action=getQuizQuestions`)
+        .then(response => response.json())
+        .then(data => {
+            questions = data;
+            console.log('Loaded', questions.length, 'questions from API');
+            return data;
+        })
+        .catch(error => {
+            console.error('Error loading questions:', error);
+            handleError(error);
+        });
+}
+
+
 // Load quiz questions
+
+/*
 function loadQuestions() {
   return fetch(`${API_URL}?action=getQuizQuestions`)
     .then(response => response.json())
@@ -201,7 +227,7 @@ function loadQuestions() {
       console.error('Error loading questions:', error);
       handleError(error);
     });
-}
+}*/
 
 
 // Start the assessment
