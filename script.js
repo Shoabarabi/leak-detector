@@ -437,6 +437,17 @@ function displayResults(result) {
   if (progressContainer) {
     progressContainer.style.display = 'none';
   }
+
+  // Reduce header box height on results screen only - ADD THIS
+  const headerElement = document.querySelector('.header');
+  if (headerElement) {
+    headerElement.style.paddingBottom = '10px';
+  }
+
+  const experienceText = document.querySelector('.experience');
+  if (experienceText) {
+    experienceText.style.marginBottom = '5px';
+  }
   
   // Hide subtitle text on results page to save vertical space
   const headerSubtitle = document.querySelector('.subtitle');
