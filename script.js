@@ -557,7 +557,8 @@ function drawPieChart(leakPercentage) {
   ctx.font = 'bold 36px Arial';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText(leakPercentage.toFixed(1) + '%', centerX, centerY);
+  ctx.fillText(Math.round(leakPercentage) + '%', centerX, centerY);
+  
 }
 
 // Handle inline email submission
