@@ -512,8 +512,8 @@ function drawPieChart(leakPercentage) {
   const ctx = canvas.getContext('2d');
   const centerX = canvas.width / 2;
   const centerY = canvas.height / 2;
-  const outerRadius = 90;
-  const innerRadius = 75;
+  const outerRadius = 70;
+  const innerRadius = 58;
   
   // Clear canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
