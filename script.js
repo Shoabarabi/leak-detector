@@ -431,6 +431,12 @@ function displayResults(result) {
   // Show SUMMARY screen first (not full results)
   hideAllScreens();
   document.getElementById('result-summary-screen').classList.add('active');
+
+  // Hide progress bar on results screen - ADD THIS
+  const progressContainer = document.querySelector('.progress-container');
+  if (progressContainer) {
+    progressContainer.style.display = 'none';
+  }
   
   // Hide subtitle text on results page to save vertical space
   const headerSubtitle = document.querySelector('.subtitle');
