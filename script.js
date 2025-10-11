@@ -737,7 +737,7 @@ function startOver() {
 }
 
 function requestAudit() {
-  window.open('https://calendly.com/mainnov/recovery', '_blank');
+  window.open('calendly.com/ds-shoab/30min', '_blank');
 }
 
 // Enhanced email capture modal
