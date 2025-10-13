@@ -17,25 +17,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = file_get_contents('php://input');
     
     $ch = curl_init($googleUrl);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $input);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);  // This follows redirects
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     
     $response = curl_exec($ch);
     $error = curl_error($ch);
     curl_close($ch);
     
-    // If curl succeeded (no network errors), assume email was sent
-    if (!$error) {
-        echo json_encode(['success' => true, 'message' => 'Report sent successfully']);
+    // **FIXED LOGIC:** Pass the actual response from Google back to the frontend
+    if ($error) {
+        echo json_encode(['success' => false, 'error' => 'Proxy network error: ' . $error]);
     } else {
-        echo json_encode(['success' => false, 'error' => 'Network error: ' . $error]);
+        // Echo the JSON response from the Google Apps Script directly
+        echo $response; 
     }
     exit;
 }
+
 
 // Handle GET requests (keep your existing GET code below)
 $action = $_GET['action'] ?? '';
