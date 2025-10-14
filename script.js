@@ -1595,15 +1595,15 @@ async function generatePDFFromHTML(result) {
       format: 'a4'
     });
     
-    const pages = Array.from(container.querySelectorAll('.page'));
+    const reportPages  = Array.from(container.querySelectorAll('.page'));
     //const pages = container.querySelectorAll('.page');
     
-    for (let i = 0; i < pages.length; i++) {
+    for (let i = 0; i < reportPages.length; i++) {
       if (i > 0) {
         pdf.addPage();
       }
       
-      const canvas = await html2canvas(pages[i], {
+      const canvas = await html2canvas(reportPages[i], {
         scale: 1, // ← CHANGE: was 2, now 1
         useCORS: true,
         backgroundColor: '#ffffff',
