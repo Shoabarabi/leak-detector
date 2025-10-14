@@ -1595,7 +1595,8 @@ async function generatePDFFromHTML(result) {
       format: 'a4'
     });
     
-    const pages = container.querySelectorAll('.page');
+    const pages = Array.from(container.querySelectorAll('.page'));
+    //const pages = container.querySelectorAll('.page');
     
     for (let i = 0; i < pages.length; i++) {
       if (i > 0) {
