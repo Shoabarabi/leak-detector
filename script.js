@@ -1604,7 +1604,7 @@ async function generatePDFFromHTML(result) {
       }
       
       const canvas = await html2canvas(reportPages[i], {
-        scale: 2, // ← CHANGE: was 2, now 1
+        scale: 3, // ← CHANGE: was 2, now 1
         useCORS: true,
         backgroundColor: '#ffffff',
         logging: false
