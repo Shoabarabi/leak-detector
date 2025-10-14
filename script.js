@@ -318,9 +318,27 @@ async function generatePDFFromHTML(result) {
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     const pages = container.querySelectorAll('.page'); // Assuming your template has .page elements
     
-    // If no .page elements, render the whole container
-    if (pages.length === 0) {
-        pages.push(container);
+    const reportPages  = Array.from(container.querySelectorAll('.page'));
+    //const pages = container.querySelectorAll('.page');
+    
+    for (let i = 0; i < reportPages.length; i++) {
+      if (i > 0) {
+        pdf.addPage();
+      }
+      
+      const canvas = await html2canvas(reportPages[i], {
+        scale: 1, // ← CHANGE: was 2, now 1
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        logging: false
+      });
+      
+      const imgData = canvas.toDataURL('image/jpeg', 0.8);  // ← CHANGE: was 'image/png', now 'image/jpeg', 0.8
+      //const imgData = canvas.toDataURL('image/png');
+      const imgWidth = 210; // A4 width in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      
+      pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
     }
     
     for (let i = 0; i < pages.length; i++) {
