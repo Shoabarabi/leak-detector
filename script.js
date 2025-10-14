@@ -1603,13 +1603,14 @@ async function generatePDFFromHTML(result) {
       }
       
       const canvas = await html2canvas(pages[i], {
-        scale: 2,
+        scale: 1, // ← CHANGE: was 2, now 1
         useCORS: true,
         backgroundColor: '#ffffff',
         logging: false
       });
       
-      const imgData = canvas.toDataURL('image/png');
+      const imgData = canvas.toDataURL('image/jpeg', 0.8);  // ← CHANGE: was 'image/png', now 'image/jpeg', 0.8
+      //const imgData = canvas.toDataURL('image/png');
       const imgWidth = 210; // A4 width in mm
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       
