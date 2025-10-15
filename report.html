@@ -1807,11 +1807,36 @@ function buildOtherLeaksGrid(otherLeaks) {
 // INITIALIZE CHARTS
 // ========================================
 function initializeCharts(data) {
+  console.log('🎨 START: Initializing charts');
+  console.log('🎨 Data received:', data);
+  console.log('🎨 totalLeakagePercent:', data.totalLeakagePercent);
+  
   const donutCanvas = document.getElementById('donutPage1');
-  if (donutCanvas) {
-    donutCanvas.width = 480;
-    donutCanvas.height = 480;
-    const donutCtx = donutCanvas.getContext('2d');
+  console.log('🎨 Canvas element found?', donutCanvas !== null);
+  
+  if (!donutCanvas) {
+    console.error('❌ ERROR: Canvas element with id="donutPage1" not found!');
+    console.log('Available canvases:', document.querySelectorAll('canvas'));
+    return;
+  }
+  
+  console.log('🎨 Chart library available?', typeof Chart !== 'undefined');
+  
+  if (typeof Chart === 'undefined') {
+    console.error('❌ ERROR: Chart.js library not loaded!');
+    return;
+  }
+  
+  donutCanvas.width = 480;
+  donutCanvas.height = 480;
+  const donutCtx = donutCanvas.getContext('2d');
+  
+  console.log('🎨 Creating chart with values:', {
+    leakage: data.totalLeakagePercent,
+    healthy: 100 - data.totalLeakagePercent
+  });
+  
+  try {
     new Chart(donutCtx, {
       type: 'doughnut',
       data: {
@@ -1830,8 +1855,14 @@ function initializeCharts(data) {
         }
       }
     });
+    console.log('✅ SUCCESS: Chart created!');
+  } catch (error) {
+    console.error('❌ ERROR creating chart:', error);
   }
 }
+
+
+
 
 // ========================================
 // DOWNLOAD PDF
