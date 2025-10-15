@@ -1677,7 +1677,7 @@ function populateReport(data) {
   buildPriorityCards(top8Leaks);
   buildTop3LeakCards(top3Leaks, totalLoss);
   buildOtherLeaksGrid(otherLeaks);
-  initializeCharts(data);
+  //initializeCharts(data);
 }
 
 
@@ -1933,6 +1933,8 @@ async function initializeReport() {
     document.getElementById('loading-screen').classList.add('hidden');
     document.getElementById('report-content').classList.add('show');
     document.getElementById('download-pdf-btn').style.display = 'block';
+
+    initializeCharts(reportData); // <--- ADD THIS LINE HERE
     
   } catch (error) {
     console.error('Init error:', error);
