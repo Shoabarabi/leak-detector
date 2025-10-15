@@ -56,6 +56,14 @@ if ($action === 'calculateLeakage') {
 
 }
 
+// ========================================
+// NEW: Add these 3 lines here
+// ========================================
+if ($action === 'getReportData') {
+    $url .= '&sessionId=' . urlencode($_GET['sessionId'] ?? '');
+}
+// ========================================
+
 // Use cURL for GET requests
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url);
