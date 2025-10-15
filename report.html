@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Revenue Leak Executive Briefing</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<style>
+  /* ALL YOUR EXISTING STYLES - KEEP THEM */
+  :root{
+    --bg:#f6f7f9;
+    --card:#ffffff;
+    --text:#111827;
+    --muted:#6b7280;
+    --accent:#00b7b7;
+    --danger:#c53030;
+    --radius:10px;
+    --page-width:210mm;
+    --page-height:297mm;
+  }
+
+  html,body{height:100%; margin:0; font-family:Inter,system-ui,-apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased;}
+  .page{
+    width:var(--page-width);
+    height:var(--page-height);
+    box-sizing:border-box;
+    margin:20px auto;
+    padding:36px 46px;
+    background:var(--card);
+    border:1px solid #e8e8ea;
+    border-radius:8px;
+    box-shadow:0 10px 30px rgba(16,24,40,0.06);
+    position:relative;
+    page-break-after:always;
+  }
+  
+  /* ... ALL YOUR OTHER EXISTING STYLES ... */
+  /* I'm keeping this short, but you need to include ALL styles from your file */
+  
+  header{display:flex; justify-content:space-between; align-items:center; gap:18px; margin-bottom:18px;}
+  h1{font-size:20px; margin:0; font-weight:700;}
+  .muted{color:var(--muted); font-size:13px;}
+  
+  /* ... (include all the rest of your styles) ... */
+  
+  /* ========== NEW STYLES - ADD THESE ========== */
+  #loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.98);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  
+  #loading-screen.hidden {
+    display: none;
+  }
+  
+  .spinner {
+    border: 4px solid #f3f4f6;
+    border-top: 4px solid var(--accent);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  #error-screen {
+    display: none;
+    padding: 40px;
+    text-align: center;
+    max-width: 600px;
+    margin: 100px auto;
+  }
+  
+  #error-screen.show {
+    display: block;
+  }
+  
+  #report-content {
+    display: none;
+  }
+  
+  #report-content.show {
+    display: block;
+  }
+  
+  .download-pdf-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 24px;
+    background: var(--accent);
+    color: #001;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 183, 183, 0.3);
+    z-index: 1000;
+    transition: all 0.2s;
+  }
+  
+  .download-pdf-btn:hover {
+    background: #009999;
+    transform: translateY(-2px);
+  }
+  
+  .download-pdf-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== NEW: Loading Screen ========== -->
+<div id="loading-screen">
+  <div class="spinner"></div>
+  <p style="margin-top: 20px; color: var(--muted); font-size: 18px;">Loading your report...</p>
+</div>
+
+<!-- ========== NEW: Error Screen ========== -->
+<div id="error-screen">
+  <h1 style="color: var(--danger); margin-bottom: 20px;">⚠️ Report Not Found</h1>
+  <p style="color: var(--muted); font-size: 16px; line-height: 1.6;">
+    We couldn't load your report. This could be because:
+  </p>
+  <ul style="text-align: left; max-width: 400px; margin: 20px auto; color: var(--muted);">
+    <li>The link is invalid or expired</li>
+    <li>The session ID is missing</li>
+    <li>There was a technical error</li>
+  </ul>
+  <p style="margin-top: 30px;">
+    <a href="https://leakdetector.mainnov.tech/index.html" style="color: var(--accent); text-decoration: underline;">
+      Return to homepage
+    </a>
+  </p>
+</div>
+
+<!-- ========== NEW: Download Button ========== -->
+<button id="download-pdf-btn" class="download-pdf-btn" onclick="downloadPDF()" style="display: none;">
+  📥 Download PDF Report
+</button>
+
+<!-- ========== Report Content (ALL YOUR EXISTING 8 PAGES) ========== -->
+<div id="report-content">
+  
+<!-- KEEP ALL YOUR EXISTING 8 PAGES HERE - I'll show just the structure -->
+
+<!-- ========== PAGE 1 ========== -->
+<div class="page" id="page-1">
+  <!-- ALL YOUR EXISTING PAGE 1 HTML -->
+</div>
+
+<!-- ========== PAGE 2 ========== -->
+<div class="page" id="page-2" style="padding:32px 46px 50px 46px;">
+  <!-- ALL YOUR EXISTING PAGE 2 HTML -->
+</div>
+
+<!-- ========== PAGES 3-8 ========== -->
+<!-- Include all remaining pages exactly as they are in your file -->
+
+</div>
+
+<!-- ========== REPLACE ALL THE <script> CONTENT WITH THIS ========== -->
+<script>
+// ========================================
+// CONFIGURATION
+// ========================================
+const API_URL = 'https://leakdetector.mainnov.tech/proxy.php';
+
+// ========================================
+// READ SESSION ID FROM URL
+// ========================================
+function getSessionIdFromURL() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('id');
+}
+
+// ========================================
+// FETCH REPORT DATA
+// ========================================
+async function fetchReportData(sessionId) {
+  try {
+    const response = await fetch(`${API_URL}?action=getReportData&sessionId=${sessionId}`);
+    const result = await response.json();
+    
+    if (!result.success) {
+      throw new Error(result.error || 'Failed to load report');
+    }
+    
+    return result.data;
+    
+  } catch (error) {
+    console.error('Error fetching report data:', error);
+    throw error;
+  }
+}
+
+// ========================================
+// POPULATE REPORT WITH DATA
+// ========================================
+function populateReport(data) {
+  console.log('Populating with data:', data);
+  
+  // Calculate values
+  const dailyLoss = Math.round(data.totalLeakageDollars / 365);
+  const weeklyLoss = Math.round(data.totalLeakageDollars / 52);
+  const monthlyLoss = Math.round(weeklyLoss * 4);
+  const leakagePercent = data.totalLeakagePercent;
+  const totalLoss = data.totalLeakageDollars;
+  
+  // Helper function
+  const setText = (id, text) => {
+    const el = document.getElementById(id);
+    if (el) el.innerText = text;
+  };
+  
+  // Date formatting
+  const today = new Date();
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const dateStr = months[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
+  
+  // Page 1
+  setText('clientNameHeader', data.name + ' at ' + data.company);
+  setText('clientDateHeader', dateStr);
+  setText('totalLossText', totalLoss.toLocaleString());
+  setText('dailyLossToday', dailyLoss.toLocaleString());
+  setText('weeklyLossText', weeklyLoss.toLocaleString());
+  setText('monthlyLossText', monthlyLoss.toLocaleString());
+  setText('weeklyLossRepeat', weeklyLoss.toLocaleString());
+  setText('oneWeekLoss', weeklyLoss.toLocaleString());
+  setText('oneMonthLoss', monthlyLoss.toLocaleString());
+  setText('ninetyDayLoss', Math.round(weeklyLoss * 12).toLocaleString());
+  setText('donutCenterText', leakagePercent.toFixed(1) + '%');
+  
+  // Page 2
+  setText('totalLossHeaderP2', (totalLoss / 1000000).toFixed(1) + 'M');
+  setText('totalLossClosingP2', (totalLoss / 1000000).toFixed(1) + 'M');
+  
+  // Page 3
+  setText('totalLossP3', (totalLoss / 1000000).toFixed(1) + 'M');
+  
+  // Convert leaks to sorted array
+  const leaksArray = Object.entries(data.leaks).map(([name, value]) => ({
+    name: name,
+    value: value,
+    shortName: name.split(' ')[0]
+  })).sort((a, b) => b.value - a.value);
+  
+  // Top 3
+  const top3Total = leaksArray.slice(0, 3).reduce((sum, leak) => sum + leak.value, 0);
+  const top3Percent = ((top3Total / totalLoss) * 100).toFixed(0);
+  setText('top3Total', (top3Total / 1000).toFixed(0));
+  setText('top3Percent', top3Percent);
+  
+  // Other 9
+  const other9Total = leaksArray.slice(3).reduce((sum, leak) => sum + leak.value, 0);
+  setText('other9Total', (other9Total / 1000).toFixed(0) + 'K');
+  setText('other9TotalLarge', (other9Total / 1000).toFixed(0));
+  
+  // Page 7
+  setText('yourLeakageP7', leakagePercent.toFixed(1));
+  setText('totalLossBridge', (totalLoss / 1000000).toFixed(1));
+  
+  // Page 8
+  setText('doNothingLossP8', totalLoss.toLocaleString());
+  setText('annualLossP8', (totalLoss / 1000000).toFixed(1) + 'M');
+  setText('monthLossP8', (monthlyLoss / 1000).toFixed(0) + 'K');
+  setText('quarterLossP8', (monthlyLoss * 3 / 1000).toFixed(0) + 'K');
+  setText('dailyLossP8', dailyLoss.toLocaleString());
+  
+  const conservRecov = Math.round(totalLoss * 0.50);
+  const probRecov = Math.round(totalLoss * 0.65);
+  const roiInvestment = 25000;
+  
+  setText('conservRecovP8', (conservRecov / 1000).toFixed(0) + 'K');
+  setText('probRecovP8', (probRecov / 1000).toFixed(0) + 'K');
+  setText('roiRangeP8', (conservRecov / roiInvestment).toFixed(0) + '-' + (probRecov / roiInvestment).toFixed(0));
+  
+  // Implementation count
+  ['implCountHeader', 'implCountText', 'implCountWhy', 'implCountBridge'].forEach(id => {
+    setText(id, '50');
+  });
+  
+  // ROI constants
+  setText('consultantCostP8', '150,000');
+  setText('consultantCostMaxP8', '200,000');
+  setText('internalCostP8', '120,000');
+  setText('mainnovInvestP8', '25,000');
+  setText('week1PayP8', '5,000');
+  
+  // Initialize charts
+  initializeCharts(data);
+}
+
+// ========================================
+// INITIALIZE CHARTS
+// ========================================
+function initializeCharts(data) {
+  const donutCanvas = document.getElementById('donutPage1');
+  if (donutCanvas) {
+    donutCanvas.width = 480;
+    donutCanvas.height = 480;
+    const donutCtx = donutCanvas.getContext('2d');
+    new Chart(donutCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Leakage', 'Healthy'],
+        datasets: [{
+          data: [data.totalLeakagePercent, 100 - data.totalLeakagePercent],
+          backgroundColor: ['#c53030', '#e5e7eb'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        cutout: '75%',
+        plugins: { 
+          legend: { display: false },
+          tooltip: { enabled: false }
+        }
+      }
+    });
+  }
+}
+
+// ========================================
+// DOWNLOAD PDF
+// ========================================
+async function downloadPDF() {
+  const btn = document.getElementById('download-pdf-btn');
+  btn.disabled = true;
+  btn.innerText = '⏳ Generating PDF...';
+  
+  try {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4'
+    });
+    
+    const pages = document.querySelectorAll('.page');
+    
+    for (let i = 0; i < pages.length; i++) {
+      if (i > 0) pdf.addPage();
+      
+      const canvas = await html2canvas(pages[i], {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        logging: false
+      });
+      
+      const imgData = canvas.toDataURL('image/png');
+      const imgWidth = 210;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+    }
+    
+    pdf.save('Revenue_Leak_Report.pdf');
+    
+    btn.disabled = false;
+    btn.innerText = '📥 Download PDF Report';
+    
+  } catch (error) {
+    console.error('PDF error:', error);
+    alert('Error generating PDF. Please try again.');
+    btn.disabled = false;
+    btn.innerText = '📥 Download PDF Report';
+  }
+}
+
+// ========================================
+// INITIALIZE REPORT
+// ========================================
+async function initializeReport() {
+  try {
+    const sessionId = getSessionIdFromURL();
+    
+    if (!sessionId) {
+      throw new Error('No session ID provided');
+    }
+    
+    console.log('Loading report for:', sessionId);
+    
+    const reportData = await fetchReportData(sessionId);
+    
+    populateReport(reportData);
+    
+    document.getElementById('loading-screen').classList.add('hidden');
+    document.getElementById('report-content').classList.add('show');
+    document.getElementById('download-pdf-btn').style.display = 'block';
+    
+  } catch (error) {
+    console.error('Init error:', error);
+    document.getElementById('loading-screen').classList.add('hidden');
+    document.getElementById('error-screen').classList.add('show');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initializeReport);
+</script>
+
+</body>
+</html>
