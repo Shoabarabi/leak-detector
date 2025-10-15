@@ -1546,29 +1546,35 @@ function populateReport(data) {
   console.log('🔍 Is array?', Array.isArray(data.leaks));
   console.log('🔍 Full data.leaks:', data.leaks);
   
-  // SAFETY CHECK: Ensure data.leaks is an array
+  // CRITICAL FIX: Convert object to array
   let leaksArray = [];
   
   if (Array.isArray(data.leaks)) {
-    // Already an array
+    console.log('✅ data.leaks is already an array');
     leaksArray = data.leaks;
   } else if (data.leaks && typeof data.leaks === 'object') {
-    // It's an object, convert to array
-    leaksArray = Object.entries(data.leaks).map(([category, value]) => ({
-      category: category,
-      leakageDollars: typeof value === 'object' ? value.leakageDollars : value,
-      leakagePercent: typeof value === 'object' ? value.leakagePercent : 0
-    }));
+    console.log('🔧 Converting object to array...');
+    // Convert object like {category: amount} to array of objects
+    leaksArray = Object.entries(data.leaks).map(([category, value]) => {
+      console.log(`Processing: ${category} = ${value}`);
+      return {
+        category: category,
+        leakageDollars: typeof value === 'number' ? value : (value.leakageDollars || 0),
+        leakagePercent: typeof value === 'number' ? 0 : (value.leakagePercent || 0)
+      };
+    });
   } else {
-    console.error('❌ ERROR: data.leaks is neither array nor object:', data.leaks);
+    console.error('❌ ERROR: data.leaks is invalid:', data.leaks);
     alert('Error: Invalid data format received from server');
     return;
   }
   
-  console.log('✅ Converted leaksArray:', leaksArray);
+  console.log('✅ Final leaksArray:', leaksArray);
+  console.log('✅ Array length:', leaksArray.length);
   
-  // Start with API data and enhance with descriptions
+  // NOW sort the array
   const sortedLeaks = leaksArray.sort((a, b) => b.leakageDollars - a.leakageDollars);
+  console.log('✅ Sorted leaks:', sortedLeaks);
 
   
   const leaksWithData = sortedLeaks.map(leak => {
