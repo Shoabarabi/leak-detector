@@ -1338,11 +1338,10 @@
 
 <script>
 // ========================================
-// HARDCODED LEAK DETAILS (from original)
+// HARDCODED LEAK DETAILS
 // ========================================
 const allLeaksData = [
   {
-    id: 1,
     name: "Missed Sales Opportunities",
     shortName: "Missed Sales",
     color: "#0066FF",
@@ -1357,7 +1356,6 @@ const allLeaksData = [
     mainCause: "Delayed or missed follow-ups kill warm deals."
   },
   {
-    id: 2,
     name: "Operational Inefficiency",
     shortName: "Operations",
     color: "#FF8C42",
@@ -1372,7 +1370,6 @@ const allLeaksData = [
     mainCause: "Time lost to unclear handoffs and manual processes."
   },
   {
-    id: 3,
     name: "Customer Churn",
     shortName: "Churn",
     color: "#22C55E",
@@ -1387,7 +1384,6 @@ const allLeaksData = [
     mainCause: "Late detection of unhappy or silent customers."
   },
   {
-    id: 4,
     name: "Accounts Receivable",
     shortName: "Receivables",
     color: "#8A2BE2",
@@ -1402,7 +1398,6 @@ const allLeaksData = [
     mainCause: "Late payments and poor invoice follow-up."
   },
   {
-    id: 5,
     name: "Marketing Inefficiency",
     shortName: "Marketing",
     color: "#0EA5A4",
@@ -1417,7 +1412,6 @@ const allLeaksData = [
     mainCause: "Spending without clear ROI tracking."
   },
   {
-    id: 6,
     name: "Employee Turnover",
     shortName: "Turnover",
     color: "#5B21B6",
@@ -1432,7 +1426,6 @@ const allLeaksData = [
     mainCause: "Poor engagement visibility and reactive retention."
   },
   {
-    id: 7,
     name: "Pricing Errors & Discounts",
     shortName: "Pricing",
     color: "#D946EF",
@@ -1447,7 +1440,6 @@ const allLeaksData = [
     mainCause: "Over-discounting due to lack of deal insights."
   },
   {
-    id: 8,
     name: "Supplier Inefficiencies",
     shortName: "Suppliers",
     color: "#7C3AED",
@@ -1462,7 +1454,6 @@ const allLeaksData = [
     mainCause: "Outdated contracts and unbenchmarked supplier pricing."
   },
   {
-    id: 9,
     name: "Compliance & Regulatory",
     shortName: "Compliance",
     color: "#DC2626",
@@ -1477,7 +1468,6 @@ const allLeaksData = [
     mainCause: "Missed deadlines and manual tracking errors."
   },
   {
-    id: 10,
     name: "Customer Support",
     shortName: "Support",
     color: "#06B6D4",
@@ -1492,7 +1482,6 @@ const allLeaksData = [
     mainCause: "Slow response times for key clients."
   },
   {
-    id: 11,
     name: "Tech Downtime",
     shortName: "Downtime",
     color: "#6B7280",
@@ -1507,7 +1496,6 @@ const allLeaksData = [
     mainCause: "Reactive system monitoring and weak redundancy."
   },
   {
-    id: 12,
     name: "Inventory Mismanagement",
     shortName: "Inventory",
     color: "#A16207",
@@ -1523,24 +1511,16 @@ const allLeaksData = [
   }
 ];
 
-
-
-// ========================================
-// CONFIGURATION
-// ========================================
+// API URL
 const API_URL = 'https://leakdetector.mainnov.tech/proxy.php';
 
-// ========================================
-// READ SESSION ID FROM URL
-// ========================================
+// Get session ID from URL
 function getSessionIdFromURL() {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get('id');
 }
 
-// ========================================
-// FETCH REPORT DATA
-// ========================================
+// Fetch report data
 async function fetchReportData(sessionId) {
   try {
     const response = await fetch(`${API_URL}?action=getReportData&sessionId=${sessionId}`);
@@ -1558,19 +1538,15 @@ async function fetchReportData(sessionId) {
   }
 }
 
-// ========================================
-// POPULATE REPORT WITH DATA
-// ========================================
+// Populate report with data
 function populateReport(data) {
   console.log('Populating with data:', data);
-  console.log('API leaks:', data.leaks); // Debug
+  console.log('API leaks:', data.leaks);
   
-  // STEP 1: Start with API data (which has the actual dollar values)
+  // Start with API data and enhance with descriptions
   const sortedLeaks = [...data.leaks].sort((a, b) => b.leakageDollars - a.leakageDollars);
   
-  // STEP 2: Enhance each leak with descriptions from allLeaksData
   const leaksWithData = sortedLeaks.map(leak => {
-    // Find matching description by category name
     const description = allLeaksData.find(desc => desc.name === leak.category) || {};
     
     return {
@@ -1586,7 +1562,7 @@ function populateReport(data) {
     };
   });
   
-  console.log('Enhanced leaks:', leaksWithData); // Debug
+  console.log('Enhanced leaks:', leaksWithData);
   
   // Calculate values
   const dailyLoss = Math.round(data.totalLeakageDollars / 365);
@@ -1595,13 +1571,11 @@ function populateReport(data) {
   const leakagePercent = data.totalLeakagePercent;
   const totalLoss = data.totalLeakageDollars;
   
-  // Helper function
   const setText = (id, text) => {
     const el = document.getElementById(id);
     if (el) el.innerText = text;
   };
   
-  // Date formatting
   const today = new Date();
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const dateStr = months[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
@@ -1626,18 +1600,15 @@ function populateReport(data) {
   // Page 3
   setText('totalLossP3', (totalLoss / 1000000).toFixed(1) + 'M');
   
-  // Sort leaks by value (already sorted from API)
   const top8Leaks = leaksWithData.slice(0, 8);
   const top3Leaks = leaksWithData.slice(0, 3);
   const otherLeaks = leaksWithData.slice(3);
   
-  // Top 3
   const top3Total = top3Leaks.reduce((sum, leak) => sum + leak.value, 0);
   const top3Percent = ((top3Total / totalLoss) * 100).toFixed(0);
   setText('top3Total', (top3Total / 1000).toFixed(0));
   setText('top3Percent', top3Percent);
   
-  // Other 9
   const other9Total = otherLeaks.reduce((sum, leak) => sum + leak.value, 0);
   setText('other9Total', (other9Total / 1000).toFixed(0) + 'K');
   setText('other9TotalLarge', (other9Total / 1000).toFixed(0));
@@ -1661,26 +1632,23 @@ function populateReport(data) {
   setText('probRecovP8', (probRecov / 1000).toFixed(0) + 'K');
   setText('roiRangeP8', (conservRecov / roiInvestment).toFixed(0) + '-' + (probRecov / roiInvestment).toFixed(0));
   
-  // Implementation count
   ['implCountHeader', 'implCountText', 'implCountWhy', 'implCountBridge'].forEach(id => {
     setText(id, '50');
   });
   
-  // ROI constants
   setText('consultantCostP8', '150,000');
   setText('consultantCostMaxP8', '200,000');
   setText('internalCostP8', '120,000');
   setText('mainnovInvestP8', '25,000');
   setText('week1PayP8', '5,000');
   
-  // BUILD PAGES 3-5 DYNAMICALLY
   buildPriorityCards(top8Leaks);
   buildTop3LeakCards(top3Leaks, totalLoss);
   buildOtherLeaksGrid(otherLeaks);
-  
-  // Initialize charts
   initializeCharts(data);
 }
+
+
 
 
 
