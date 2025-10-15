@@ -11,6 +11,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
+
+
+
   /* ALL YOUR EXISTING STYLES - KEEP THEM */
   :root{
     --bg:#f6f7f9;
@@ -1332,7 +1335,208 @@
 -->
 
 <!-- ========== REPLACE ALL THE <script> CONTENT WITH THIS ========== -->
+
 <script>
+// ========================================
+// HARDCODED LEAK DETAILS (from original)
+// ========================================
+const allLeaksData = [
+  {
+    id: 1,
+    name: "Missed Sales Opportunities",
+    shortName: "Missed Sales",
+     // Will be updated from API
+    color: "#0066FF",
+    problemFeeling: "Deals stall quietly. Reps promise follow-ups that never happen. By the time you realize it, the prospect's gone cold or bought elsewhere.",
+    whatsCantSee: "Most SMBs lose 40–60% of deals to \"no decision\" — HBR research shows delay and weak follow-up are top reasons leads go cold.",
+    cantSeeBullets: [
+      "Which deals have gone cold and when",
+      "Which high-value opportunities are at risk this week",
+      "Whether your reps are actually following up"
+    ],
+    tracking: "Real-time pipeline monitoring that flags silent deals before they're lost. You'll know which accounts need a nudge today.",
+    mainCause: "Delayed or missed follow-ups kill warm deals."
+  },
+  {
+    id: 2,
+    name: "Operational Inefficiency",
+    shortName: "Operations",
+    
+    color: "#FF8C42",
+    problemFeeling: "Everyone's busy, yet progress crawls. Work gets stuck in handoffs between teams, but nobody can see where the bottleneck is.",
+    whatsCantSee: "McKinsey finds knowledge workers lose roughly 20–25% of productive time to coordination friction and poor process visibility — that's nearly a day a week.",
+    cantSeeBullets: [
+      "Which processes waste the most hours",
+      "Where work stalls between departments",
+      "Whether your fixes actually improved flow"
+    ],
+    tracking: "Time-drag heatmaps revealing your top process bottlenecks. Prioritize fixes based on where hours are truly burned.",
+    mainCause: "Time lost to unclear handoffs and manual processes."
+  },
+  {
+    id: 3,
+    name: "Customer Churn",
+    shortName: "Churn",
+    
+    color: "#22C55E",
+    problemFeeling: "You only notice unhappy customers after they're gone. There's no early signal before they cancel or fail to renew.",
+    whatsCantSee: "SMBs lose 12–20% of customers yearly on average — and SaaS benchmarks show 30–50% of churn could be prevented with earlier detection.",
+    cantSeeBullets: [
+      "Which customers are at risk before they tell you",
+      "What's driving dissatisfaction",
+      "Whether your 'save' actions work"
+    ],
+    tracking: "Customer health scoring that flags at-risk accounts 45–60 days before churn. Save revenue before it walks away.",
+    mainCause: "Late detection of unhappy or silent customers."
+  },
+  {
+    id: 4,
+    name: "Accounts Receivable",
+    shortName: "Receivables",
+    
+    color: "#8A2BE2",
+    problemFeeling: "Invoices sit unpaid for weeks. Cash flow suffers, and you don't know which customers are chronic late payers until it's bad.",
+    whatsCantSee: "The average SMB waits 30–60 days to get paid, and over a third of invoices go past due — QuickBooks and Atradius data confirm late payments are a major cash-flow drag.",
+    cantSeeBullets: [
+      "Which customers always pay late",
+      "How much cash is trapped in A/R",
+      "Which clients are credit risks"
+    ],
+    tracking: "Automated A/R tracking that alerts you at day 30 — not day 60. Recover cash faster with prioritized follow-up lists.",
+    mainCause: "Late payments and poor invoice follow-up."
+  },
+  {
+    id: 5,
+    name: "Marketing Inefficiency",
+    shortName: "Marketing",
+    
+    color: "#0EA5A4",
+    problemFeeling: "You spend heavily on ads, events, and content — but can't prove what's working. Leads look random and ROI feels invisible.",
+    whatsCantSee: "40–60% of SMB marketing budgets can't be tied directly to revenue — Nielsen and WordStream show most teams can't see which channels actually work.",
+    cantSeeBullets: [
+      "Which channels truly drive sales",
+      "Actual CAC by channel",
+      "Which campaigns deserve to stop or scale"
+    ],
+    tracking: "Channel-level ROI dashboards linking every dollar to pipeline results. Cut waste, double down on winners.",
+    mainCause: "Spending without clear ROI tracking."
+  },
+  {
+    id: 6,
+    name: "Employee Turnover",
+    shortName: "Turnover",
+    
+    color: "#5B21B6",
+    problemFeeling: "Great employees leave without warning. You discover problems only in exit interviews.",
+    whatsCantSee: "SMB turnover runs 15–25% a year, and replacing each lost employee costs roughly 6–9 months of salary — SHRM and Workable data highlight how fast that adds up.",
+    cantSeeBullets: [
+      "Which employees are flight risks",
+      "Real causes of disengagement",
+      "Whether retention programs are working"
+    ],
+    tracking: "Sentiment analytics that detect disengagement early — before resignations happen.",
+    mainCause: "Poor engagement visibility and reactive retention."
+  },
+  {
+    id: 7,
+    name: "Pricing Errors & Discounts",
+    shortName: "Pricing",
+    
+    color: "#D946EF",
+    problemFeeling: "Reps discount too deeply \"just to close,\" eroding margin. No one knows what discount levels are truly needed to win.",
+    whatsCantSee: "Many reps over-discount by 15–30%, quietly eroding 3–7% of annual margin — Bain and HubSpot note most firms lack visibility into discounting behavior.",
+    cantSeeBullets: [
+      "Who's over-discounting",
+      "How much margin is lost",
+      "What discount level closes most deals"
+    ],
+    tracking: "Smart discount guardrails showing \"deals like this close at 12% off.\" Protect margin without slowing sales.",
+    mainCause: "Over-discounting due to lack of deal insights."
+  },
+  {
+    id: 8,
+    name: "Supplier Inefficiencies",
+    shortName: "Suppliers",
+    
+    color: "#7C3AED",
+    problemFeeling: "Supplier prices creep up over time. You suspect overpayment but lack data to negotiate.",
+    whatsCantSee: "Companies that skip annual supplier benchmarking overpay 8–15% — Deloitte and CIPS research confirm consistent savings when rates are reviewed regularly.",
+    cantSeeBullets: [
+      "Which suppliers charge above market",
+      "Where renegotiation yields biggest savings",
+      "Whether volume justifies better terms"
+    ],
+    tracking: "Supplier cost benchmarking dashboards with market-rate comparisons. Negotiate from data, not guesswork.",
+    mainCause: "Outdated contracts and unbenchmarked supplier pricing."
+  },
+  {
+    id: 9,
+    name: "Compliance & Regulatory",
+    shortName: "Compliance",
+    
+    color: "#DC2626",
+    problemFeeling: "Filing deadlines sneak up. Late fees and penalties eat cash. Manual tracking creates constant \"fire drills.\"",
+    whatsCantSee: "Missed filings and late reports can cost SMBs $10K–$30K a year — PwC and ADP studies show most penalties stem from preventable oversights.",
+    cantSeeBullets: [
+      "Upcoming compliance deadlines",
+      "Exposure to potential fines",
+      "Effectiveness of your current process"
+    ],
+    tracking: "Automated compliance calendars with proactive alerts 60, 30, and 7 days out. Stay compliant without chaos.",
+    mainCause: "Missed deadlines and manual tracking errors."
+  },
+  {
+    id: 10,
+    name: "Customer Support",
+    shortName: "Support",
+    
+    color: "#06B6D4",
+    problemFeeling: "Tickets pile up and VIP clients wait too long. You can't see which issues are driving churn or repeat complaints.",
+    whatsCantSee: "Average first-response times hover around 12–24 hours — Zendesk and HubSpot data show delays like these drive churn among high-value clients.",
+    cantSeeBullets: [
+      "Which support issues cause churn",
+      "How quickly VIPs are helped",
+      "Root causes of repeat issues"
+    ],
+    tracking: "Smart ticket routing that auto-prioritizes high-value customers. Track resolution time vs. retention impact.",
+    mainCause: "Slow response times for key clients."
+  },
+  {
+    id: 11,
+    name: "Tech Downtime",
+    shortName: "Downtime",
+    
+    color: "#6B7280",
+    problemFeeling: "Systems fail — and you only find out from customers. Each outage costs time, money, and reputation.",
+    whatsCantSee: "A single SMB outage costs $5K–$15K in lost productivity and recovery — Datto and Infrascale confirm downtime hits hardest when monitoring is reactive.",
+    cantSeeBullets: [
+      "Downtime cost per system",
+      "Which apps are most critical",
+      "Whether redundancy works"
+    ],
+    tracking: "Uptime and revenue-impact dashboards that alert your team instantly when systems fail.",
+    mainCause: "Reactive system monitoring and weak redundancy."
+  },
+  {
+    id: 12,
+    name: "Inventory Mismanagement",
+    shortName: "Inventory",
+    
+    color: "#A16207",
+    problemFeeling: "Fast sellers stock out. Slow stock piles up. You're guessing at reorder points and tying up cash in the wrong places.",
+    whatsCantSee: "Poor inventory control costs 5–12% of annual revenue — Gartner and Forrester benchmarks show overstock and stockouts silently drain SMB profits.",
+    cantSeeBullets: [
+      "Over/understock SKUs",
+      "Optimal reorder points",
+      "Cash trapped in dead inventory"
+    ],
+    tracking: "Demand forecasting that predicts what to order, when, and what to clear. Stop guessing, start optimizing.",
+    mainCause: "Poor forecasting and no real-time stock visibility."
+  }
+];
+
+
+
 // ========================================
 // CONFIGURATION
 // ========================================
@@ -1369,8 +1573,19 @@ async function fetchReportData(sessionId) {
 // ========================================
 // POPULATE REPORT WITH DATA
 // ========================================
+
 function populateReport(data) {
   console.log('Populating with data:', data);
+  
+  // Map API leak values to hardcoded descriptions
+  const leaksWithData = allLeaksData.map(leak => {
+    return {
+      ...leak,
+      value: data.leaks[leak.name] || 0  // Get value from API
+    };
+  });
+
+
   
   // Calculate values
   const dailyLoss = Math.round(data.totalLeakageDollars / 365);
@@ -1410,21 +1625,22 @@ function populateReport(data) {
   // Page 3
   setText('totalLossP3', (totalLoss / 1000000).toFixed(1) + 'M');
   
-  // Convert leaks to sorted array
-  const leaksArray = Object.entries(data.leaks).map(([name, value]) => ({
-    name: name,
-    value: value,
-    shortName: name.split(' ')[0]
-  })).sort((a, b) => b.value - a.value);
+  // Sort leaks by value
+  // Sort leaks by value (using API values)
+  const sortedLeaks = [...leaksWithData].sort((a, b) => b.value - a.value);
+  
+  const top8Leaks = sortedLeaks.slice(0, 8);
+  const top3Leaks = sortedLeaks.slice(0, 3);
+  const otherLeaks = sortedLeaks.slice(3);
   
   // Top 3
-  const top3Total = leaksArray.slice(0, 3).reduce((sum, leak) => sum + leak.value, 0);
+  const top3Total = top3Leaks.reduce((sum, leak) => sum + leak.value, 0);
   const top3Percent = ((top3Total / totalLoss) * 100).toFixed(0);
   setText('top3Total', (top3Total / 1000).toFixed(0));
   setText('top3Percent', top3Percent);
   
   // Other 9
-  const other9Total = leaksArray.slice(3).reduce((sum, leak) => sum + leak.value, 0);
+  const other9Total = otherLeaks.reduce((sum, leak) => sum + leak.value, 0);
   setText('other9Total', (other9Total / 1000).toFixed(0) + 'K');
   setText('other9TotalLarge', (other9Total / 1000).toFixed(0));
   
@@ -1459,9 +1675,133 @@ function populateReport(data) {
   setText('mainnovInvestP8', '25,000');
   setText('week1PayP8', '5,000');
   
+  // BUILD PAGES 3-5 DYNAMICALLY
+  buildPriorityCards(top8Leaks);
+  buildTop3LeakCards(top3Leaks, totalLoss);
+  buildOtherLeaksGrid(otherLeaks);
+  
   // Initialize charts
   initializeCharts(data);
 }
+
+// ========================================
+// BUILD PRIORITY CARDS (Page 3)
+// ========================================
+function buildPriorityCards(top8Leaks) {
+  const priorityCardsTop = document.getElementById('priorityCardsTop');
+  const priorityCardsBottom = document.getElementById('priorityCardsBottom');
+  
+  priorityCardsTop.innerHTML = '';
+  priorityCardsBottom.innerHTML = '';
+  
+  const gradientColors = [
+    { bg: 'linear-gradient(135deg, #ff000025, #ff000010)', border: '#c53030', text: '#991b1b' },
+    { bg: 'linear-gradient(135deg, #ff4d0025, #ff4d0010)', border: '#dc2626', text: '#991b1b' },
+    { bg: 'linear-gradient(135deg, #ff8c4225, #ff8c4210)', border: '#ea580c', text: '#9a3412' },
+    { bg: 'linear-gradient(135deg, #fbbf2425, #fbbf2410)', border: '#f59e0b', text: '#92400e' },
+    { bg: 'linear-gradient(135deg, #fde04725, #fde04710)', border: '#eab308', text: '#854d0e' },
+    { bg: 'linear-gradient(135deg, #bef26425, #bef26410)', border: '#84cc16', text: '#3f6212' },
+    { bg: 'linear-gradient(135deg, #86efac25, #86efac10)', border: '#22c55e', text: '#166534' },
+    { bg: 'linear-gradient(135deg, #6ee7b725, #6ee7b710)', border: '#10b981', text: '#065f46' }
+  ];
+  
+  top8Leaks.forEach((leak, idx) => {
+    const style = gradientColors[idx];
+    const card = document.createElement('div');
+    card.style.cssText = `text-align: center; padding: 18px 12px; background: ${style.bg}; border: 2px solid ${style.border}; border-radius: 8px;`;
+    card.innerHTML = `
+      <div style="font-size: 10px; font-weight: 700; color: ${style.text}; margin-bottom: 6px; text-transform: uppercase;">Priority #${idx + 1}</div>
+      <div style="font-size: 22px; font-weight: 800; color: ${style.border};">$${(leak.value / 1000).toFixed(0)}K</div>
+      <div style="font-size: 11px; color: #6b7280; margin-top: 4px;">${leak.shortName}</div>
+    `;
+    
+    if (idx < 4) {
+      priorityCardsTop.appendChild(card);
+    } else {
+      priorityCardsBottom.appendChild(card);
+    }
+  });
+}
+
+// ========================================
+// BUILD TOP 3 LEAK CARDS (Pages 3-4)
+// ========================================
+function buildTop3LeakCards(top3Leaks, totalLoss) {
+  const top3ContainerFirst = document.getElementById('top3LeaksContainerFirst');
+  const top3ContainerRest = document.getElementById('top3LeaksContainerRest');
+  
+  top3ContainerFirst.innerHTML = '';
+  top3ContainerRest.innerHTML = '';
+  
+  top3Leaks.forEach((leak, idx) => {
+    const card = document.createElement('div');
+    card.className = 'leak-card';
+    card.style.borderLeft = `4px solid ${leak.color}`;
+    
+    card.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px;">
+        <h3 style="font-size: 17px; font-weight: 700; margin: 0; color: var(--text);">#${idx + 1}: ${leak.name}</h3>
+        <div>
+          <div style="font-size: 18px; font-weight: 800; color: var(--danger); text-align: right;">$${(leak.value / 1000).toFixed(0)}K</div>
+          <div style="font-size: 12px; color: var(--muted); margin-top: 2px;">${((leak.value / totalLoss) * 100).toFixed(1)}% of total</div>
+        </div>
+      </div>
+
+      <div style="margin: 16px 0; padding: 14px; border-radius: 6px; background: #fef2f2; border-left: 3px solid var(--danger);">
+        <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0; color: var(--danger);">The Problem You're Feeling</div>
+        <p style="font-size: 13px; line-height: 1.6; margin: 0; color: var(--text);">${leak.problemFeeling}</p>
+      </div>
+
+      <div style="margin: 16px 0; padding: 14px; border-radius: 6px; background: #fff7ed; border-left: 3px solid #FF8C42;">
+        <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0; color: #FF8C42;">What You Can't See Right Now</div>
+        <p style="font-size: 13px; line-height: 1.6; margin: 0; color: var(--text);">${leak.whatsCantSee}</p>
+        <div style="margin-top:12px;">
+          <strong style="font-size:12px; color:#FF8C42;">What You Can't See Right Now:</strong>
+          <ul style="margin: 8px 0 0 0; padding-left: 20px;">
+            ${leak.cantSeeBullets.map(item => `<li style="font-size: 13px; line-height: 1.6; margin: 4px 0; color: var(--text);">${item}</li>`).join('')}
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin: 16px 0; padding: 14px; border-radius: 6px; background: #f0fdfa; border-left: 3px solid var(--accent);">
+        <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0; color: var(--accent);">What We'll Track For You</div>
+        <p style="font-size: 13px; line-height: 1.6; margin: 0; color: var(--text);">${leak.tracking}</p>
+      </div>
+    `;
+    
+    if (idx === 0) {
+      top3ContainerFirst.appendChild(card);
+    } else {
+      top3ContainerRest.appendChild(card);
+    }
+  });
+}
+
+// ========================================
+// BUILD OTHER LEAKS GRID (Page 5)
+// ========================================
+function buildOtherLeaksGrid(otherLeaks) {
+  const otherLeaksGrid = document.getElementById('otherLeaksGrid');
+  otherLeaksGrid.innerHTML = '';
+  
+  otherLeaks.forEach((leak, idx) => {
+    const leakItem = document.createElement('div');
+    leakItem.className = 'leak-item';
+    
+    leakItem.innerHTML = `
+      <div class="leak-item-header">
+        <span class="leak-item-name">${idx + 4}. ${leak.name}</span>
+        <span class="leak-item-amount">$${(leak.value / 1000).toFixed(0)}K</span>
+      </div>
+      <p class="leak-item-reason">${leak.mainCause}</p>
+    `;
+    
+    otherLeaksGrid.appendChild(leakItem);
+  });
+}
+
+
+
 
 // ========================================
 // INITIALIZE CHARTS
