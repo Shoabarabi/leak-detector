@@ -1577,13 +1577,25 @@ async function fetchReportData(sessionId) {
 function populateReport(data) {
   console.log('Populating with data:', data);
   
+  // Convert leaks array to object for easier lookup
+  const leaksMap = {};
+  if (Array.isArray(data.leaks)) {
+    data.leaks.forEach(leak => {
+      leaksMap[leak.category] = leak.leakageDollars;
+    });
+  }
+  
+  console.log('Leaks map:', leaksMap); // Debug line
+  
   // Map API leak values to hardcoded descriptions
   const leaksWithData = allLeaksData.map(leak => {
     return {
       ...leak,
-      value: data.leaks[leak.name] || 0  // Get value from API
+      value: leaksMap[leak.name] || 0  // Now using the leaksMap object
     };
   });
+
+
 
 
   
