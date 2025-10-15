@@ -46,6 +46,286 @@
   h1{font-size:20px; margin:0; font-weight:700;}
   .muted{color:var(--muted); font-size:13px;}
   
+  :root{
+    --bg:#f6f7f9;
+    --card:#ffffff;
+    --text:#111827;
+    --muted:#6b7280;
+    --accent:#00b7b7;
+    --danger:#c53030;
+    --radius:10px;
+    --page-width:210mm;
+    --page-height:297mm;
+  }
+
+  html,body{height:100%; margin:0; font-family:Inter,system-ui,-apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased;}
+  .page{
+    width:var(--page-width);
+    height:var(--page-height);
+    box-sizing:border-box;
+    margin:20px auto;
+    padding:36px 46px;
+    background:var(--card);
+    border:1px solid #e8e8ea;
+    border-radius:8px;
+    box-shadow:0 10px 30px rgba(16,24,40,0.06);
+    position:relative;
+    page-break-after:always;
+  }
+  header{display:flex; justify-content:space-between; align-items:center; gap:18px; margin-bottom:18px;}
+  .brand{display:flex; gap:14px; align-items:center;}
+  .logo{width:56px; height:56px; border-radius:8px; background:linear-gradient(135deg,var(--accent), rgba(0,183,183,0.7)); display:flex; align-items:center; justify-content:center; font-weight:800; color:#001; box-shadow:0 6px 18px rgba(0,183,183,0.06);}
+  h1{font-size:20px; margin:0; font-weight:700;}
+  .meta{ text-align:right; color:var(--muted); font-size:13px; }
+
+  .hero{display:flex; gap:32px; align-items:flex-start;}
+  .hero-left{flex:1;}
+  .headline{font-size:36px; font-weight:800; color:var(--text); letter-spacing:-0.5px; margin:2px 0 6px 0;}
+  .subhead{font-size:16px; color:var(--muted); margin-bottom:12px;}
+  .numeric-row{display:flex; gap:18px; align-items:baseline; margin-top:6px;}
+  .big-figure{font-size:22px; font-weight:800; color:var(--danger);}
+  .accent-figure{
+    font-size:18px; font-weight:700;
+    background: linear-gradient(90deg,var(--accent), #008b8b);
+    background-clip: text;
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    text-shadow:0 0 8px rgba(0,183,183,0.18);
+  }
+  .muted{color:var(--muted); font-size:13px;}
+
+  .chart-area{width:320px; text-align:center;}
+  canvas{display:block; margin:0 auto; max-width:100%; height:240px;}
+
+  .rec-list{display:flex; flex-direction:column; gap:12px; margin-top:8px;}
+  .rec{display:flex; gap:16px; align-items:flex-start; border-left:4px solid #eee; padding:12px 14px; border-radius:6px; background:#fafafa;}
+  .rec .left{width:160px;}
+  .rec h3{margin:0; font-size:15px;}
+  .rec p{margin:6px 0; color:var(--muted); font-size:13px;}
+  .action-list{margin-top:8px; display:flex; flex-direction:column; gap:6px;}
+  .action{display:flex; gap:10px; align-items:flex-start;}
+  .dot{width:10px; height:10px; border-radius:50%; margin-top:6px; flex:0 0 10px;}
+
+  .leak-card{border:1px solid #e5e7eb; border-radius:8px; padding:16px; margin-bottom:14px; background:#fff; border-left:4px solid var(--accent);}
+  .leak-card h3{margin:0 0 4px 0; font-size:16px; display:flex; justify-content:space-between; align-items:center;}
+  .leak-card .amount{color:var(--danger); font-weight:800;}
+  
+  .leak-problem{background:#fef2f2; padding:10px; border-radius:6px; margin:8px 0; font-size:13px;}
+  .leak-solution{background:#ecfdf5; padding:10px; border-radius:6px; margin:8px 0;}
+  .leak-solution h4{margin:0 0 6px 0; font-size:14px; color:var(--accent);}
+  .leak-actions{display:flex; flex-direction:column; gap:4px; margin-top:6px;}
+  .leak-actions li{font-size:12px; color:var(--muted);}
+  .recovery-range{font-size:13px; font-weight:700; color:var(--accent); margin-top:8px;}
+
+  .leak-item {
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    min-height: 140px;
+  }
+ 
+  .leak-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .leak-item-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  
+  .leak-item-amount {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--danger);
+  }
+
+  .leak-item-reason {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 8px;
+  }
+
+  table{width:100%; border-collapse:collapse; margin-top:10px; font-size:13px;}
+  thead th{ text-align:left; padding:10px; border-bottom:2px solid #eef0f2; color:var(--muted); font-weight:700;}
+  tbody td{padding:10px; border-bottom:1px solid #f3f4f6;}
+  .impact-bar{height:10px; background:#f3f4f6; border-radius:999px; overflow:hidden; width:220px;}
+  .impact-bar span{display:block; height:100%; background:linear-gradient(90deg,var(--accent), #008b8b);}
+
+  .grid-2{display:flex; gap:18px; margin-top:12px;}
+  .panel{flex:1; border:1px solid #f0f1f3; padding:12px; border-radius:8px; background:#fff;}
+
+  .roi-table{width:100%; border-collapse:collapse; margin-top:12px;}
+  .roi-table th, .roi-table td{padding:12px; border:1px solid #eef0f2; text-align:left; font-size:13px;}
+  .roi-table th{background:#fbfdfe; color:var(--muted); font-weight:700;}
+  .highlight{font-weight:800; color:var(--accent);}
+
+  .cta{margin-top:16px; display:inline-block; padding:12px 20px; background:var(--accent); color:#001; border-radius:8px; font-weight:800; text-decoration:none;}
+
+  footer{position:absolute; bottom:24px; left:46px; right:46px; text-align:center; color:var(--muted); font-size:12px;}
+  @media print{ .page{ box-shadow:none; border:1px solid #e9e9ea; } }
+
+  .systems-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin: 12px auto;
+    max-width: 480px;
+  }
+  .system-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 6px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    text-align: center;
+  }
+  .system-icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 4px;
+    color: var(--accent);
+  }
+  .system-name {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.2;
+  }
+
+  .obstacles-container {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    margin-top: 15px;
+  }
+  .obstacle-box {
+    display: flex;
+    gap: 14px;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    position: relative;
+  }
+  .obstacle-box::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: 8px 0 0 8px;
+  }
+  .obstacle-box.obstacle-1::before { background: #0066FF; }
+  .obstacle-box.obstacle-2::before { background: #FF8C42; }
+  .obstacle-box.obstacle-3::before { background: #22C55E; }
+
+  .obstacle-icon {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f9fafb;
+    border-radius: 8px;
+  }
+  .obstacle-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+  .obstacle-content {
+    flex: 1;
+  }
+  .obstacle-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 7px 0;
+  }
+  .obstacle-description {
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.45;
+    margin: 0 0 9px 0;
+  }
+  .obstacle-stat {
+    background: #f9fafb;
+    padding: 9px 11px;
+    border-radius: 6px;
+    border-left: 3px solid var(--accent);
+  }
+  .stat-number {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--danger);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .stat-text {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.35;
+  }
+  .stat-source {
+    font-size: 10px;
+    color: #9ca3af;
+    font-style: italic;
+    margin-top: 4px;
+  }
+
+  /* New styles for pages 6 & 7 */
+  .section-title{font-size:15px; font-weight:700; color:var(--text); margin:20px 0 10px 0;}
+  
+  .industry-list{display:flex; flex-direction:column; gap:6px; margin-bottom:12px;}
+  .industry-item{display:flex; gap:10px; align-items:flex-start; padding:7px 10px; background:#f9fafb; border-radius:6px; border-left:3px solid var(--accent);}
+  .industry-item .checkmark{color:var(--accent); font-size:13px; font-weight:700; flex-shrink:0;}
+  .industry-item .content{flex:1;}
+  .industry-name{font-size:12px; font-weight:700; color:var(--text); margin:0 0 2px 0;}
+  .industry-desc{font-size:11px; color:var(--muted); margin:0; line-height:1.3;}
+  
+  .testimonial-grid{display:grid; grid-template-columns:repeat(2, 1fr); gap:8px; margin-bottom:14px;}
+  .testimonial-box{padding:10px 12px; background:#fff; border:1px solid #e5e7eb; border-radius:8px; border-left:4px solid var(--accent); box-shadow:0 2px 6px rgba(0,183,183,0.06); transition:transform 0.2s;}
+  .testimonial-box:hover{transform:translateY(-1px); box-shadow:0 3px 10px rgba(0,183,183,0.12);}
+  .testimonial-quote{font-size:12px; color:var(--text); line-height:1.45; margin:0 0 6px 0; font-style:italic; font-weight:500;}
+  .testimonial-author{font-size:11px; color:var(--muted); margin:0; font-weight:600;}
+  
+  .star-rating{display:flex; gap:1px; margin-top:5px; align-items:center; height:14px;}
+  .star{position:relative; display:inline-block; width:12px; height:12px;}
+  .star svg{width:12px; height:12px; display:block;}
+  .star-filled{fill:#fbbf24;}
+  .star-empty{fill:#e5e7eb;}
+  .rating-text{font-size:10px; color:#92400e; font-weight:700; margin-left:3px; line-height:14px;}
+  
+  .patterns-container{display:flex; flex-direction:column; gap:8px; margin-bottom:14px;}
+  .pattern-category{padding:10px 12px; background:#fff; border:1px solid #e5e7eb; border-radius:8px; border-left:3px solid var(--accent);}
+  .pattern-header{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:5px;}
+  .pattern-title{font-size:13px; font-weight:700; color:var(--text); margin:0;}
+  .pattern-benchmark{font-size:11px; color:var(--accent); font-weight:600;}
+  .pattern-list{margin:0; padding-left:18px;}
+  .pattern-list li{font-size:11px; color:var(--muted); line-height:1.35; margin:2px 0;}
+  
+  .why-choose-box{padding:10px 12px; background:linear-gradient(135deg, #f0fdfa 0%, #e6fffa 100%); border-radius:8px; border:2px solid var(--accent); margin-bottom:12px;}
+  .why-choose-title{font-size:13px; font-weight:700; color:var(--text); margin:0 0 6px 0;}
+  .why-list{display:flex; flex-direction:column; gap:5px;}
+  .why-item{display:flex; gap:8px; align-items:flex-start;}
+  .why-item .check{color:var(--accent); font-weight:700; flex-shrink:0; font-size:13px;}
+  .why-item .text{font-size:11px; color:var(--text); line-height:1.35;}
+  
+  .bridge-box{padding:12px 16px; background:linear-gradient(135deg, #00b7b7 0%, #009999 100%); border-radius:10px; text-align:center; box-shadow:0 3px 15px rgba(0,183,183,0.2); position:relative;}
+  .bridge-text{margin:0; font-size:12px; font-weight:600; color:#fff; line-height:1.45;}
+  .bridge-text strong{display:block; margin-top:8px; font-size:13px; font-weight:700;}
+  .bridge-highlight{color:#fef3c7; font-weight:800; font-size:14px; text-shadow:0 2px 4px rgba(0,0,0,0.2);}
+
+  
   /* ... (include all the rest of your styles) ... */
   
   /* ========== NEW STYLES - ADD THESE ========== */
@@ -165,19 +445,891 @@
 <!-- KEEP ALL YOUR EXISTING 8 PAGES HERE - I'll show just the structure -->
 
 <!-- ========== PAGE 1 ========== -->
+<!-- ========== PAGE 1: Executive Snapshot ========== -->
 <div class="page" id="page-1">
-  <!-- ALL YOUR EXISTING PAGE 1 HTML -->
+  <header>
+    <div class="brand">
+      <div>
+        <h1>Revenue Leak — Executive Brief</h1>
+        <div class="muted"><span id="clientNameHeader"></span> • <span id="clientDateHeader"></span></div>
+      </div>
+    </div>
+  </header>
+
+  <section aria-labelledby="exec-headline">
+    
+    <!-- DONUT CHART - Centered at top  -->
+    <div style="text-align:center; margin:80px auto 50px auto; position:relative; width:480px;">
+      <canvas id="donutPage1"></canvas>
+      <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); text-align:center;">
+        <div style="font-size:56px; font-weight:800; color:var(--danger); line-height:1;" id="donutCenterText">17.1%</div>
+        <div style="font-size:14px; color:var(--muted); margin-top:8px;">Revenue Leakage</div>
+      </div>
+    </div>
+
+    <!-- PRIMARY HEADLINE  -->
+    <div id="exec-headline" class="headline" style="text-align:center; margin-top:30px;">
+      $<span id="totalLossText">1,103,000</span> 
+    </div>
+    
+    <!-- SECONDARY HEADLINE: Weekly Loss  -->
+    <div style="font-size:28px; font-weight:700; color:var(--danger); margin:10px 0 20px 0; line-height:1.2; text-align:center;">
+      That's $<span id="weeklyLossText">21,212</span> every week
+    </div>
+
+    <!-- URGENCY COPY  -->
+    <div style="margin-top:24px; max-width:700px; margin-left:auto; margin-right:auto;">
+      <p style="margin:0 0 8px 0; font-size:16px; color:var(--text); font-weight:600; line-height:1.4; text-align:center;">
+        Every week you operate without fixing this costs $<span id="weeklyLossRepeat">21,212</span>.
+      </p>
+      <p style="margin:0; font-size:16px; color:var(--text); font-weight:600; line-height:1.4; text-align:center;">
+        That's $<span id="monthlyLossText">84,848</span> this month while you're "thinking about it."
+      </p>
+    </div>
+
+    <!-- COST OF DELAY BOX  -->
+    <div style="margin-top:28px; padding:16px; background:#fef2f2; border-radius:8px; border-left:4px solid var(--danger); max-width:700px; margin-left:auto; margin-right:auto;">
+      <div style="font-weight:700; font-size:14px; color:var(--danger); margin-bottom:10px;">The Cost of Delay:</div>
+      <div style="display:flex; flex-direction:column; gap:6px; font-size:13px; color:var(--text);">
+        <div style="display:flex; justify-content:space-between;">
+          <span>• Act today: </span>
+          <strong>$0 lost </strong>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span>• Wait 1 week:</span>
+          <strong style="color:var(--danger);">$<span id="oneWeekLoss">21,212</span> more gone</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span>• Wait 1 month:</span>
+          <strong style="color:var(--danger);">$<span id="oneMonthLoss">84,848</span> vanished</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span>• Wait 90 days:</span>
+          <strong style="color:var(--danger);">$<span id="ninetyDayLoss">254,544</span> you'll never recover</strong>
+        </div>
+      </div>
+      <div style="margin-top:12px; padding-top:12px; border-top:1px solid #fecaca; font-size:14px; font-weight:700; color:var(--text);">
+        Every day you delay costs $<span id="dailyLossToday"></span>.
+      </div>
+    </div>
+
+  </section>
+
+  <footer>Page 1</footer>
 </div>
+
 
 <!-- ========== PAGE 2 ========== -->
+<!-- ========== PAGE 2: Pattern Interrupt ========== -->
 <div class="page" id="page-2" style="padding:32px 46px 50px 46px;">
-  <!-- ALL YOUR EXISTING PAGE 2 HTML -->
+  <header style="margin-bottom:14px;">
+    <h1 style="font-size:26px; margin:0; line-height:1.2;"><span style="color:var(--danger);">$<span id="totalLossHeaderP2">1.1M</span></span> Is Leaking. Your Data Knows Where.<br><span style="color:var(--danger);">You Don't.</span></h1>
+  </header>
+
+  <!-- Opening Section -->
+  <div style="margin-top: 22px;">
+    <p style="margin:0 0 10px 0; font-size:13px; line-height:1.5; color:var(--text);">
+      Your answer? It lives in 8 different systems.
+    </p>
+    
+    <!-- Systems Grid -->
+    <div class="systems-grid">
+      <div class="system-box">
+        <svg class="system-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+        </svg>
+        <div class="system-name">CRM</div>
+      </div>
+      
+      <div class="system-box">
+        <svg class="system-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <div class="system-name">ERP</div>
+      </div>
+      
+      <div class="system-box">
+        <svg class="system-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+        <div class="system-name">Ad Campaigns</div>
+      </div>
+      
+      <div class="system-box">
+        <svg class="system-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+        </svg>
+        <div class="system-name">E-commerce</div>
+      </div>
+      
+      <div class="system-box">
+        <svg class="system-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+        <div class="system-name">Analytics</div>
+      </div>
+      
+      <div class="system-box">
+        <svg class="system-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+        </svg>
+        <div class="system-name">Inventory</div>
+      </div>
+      
+      <div class="system-box">
+        <svg class="system-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+        <div class="system-name">Support</div>
+      </div>
+      
+      <div class="system-box">
+        <svg class="system-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <div class="system-name">Billing</div>
+      </div>
+    </div>
+
+    <p style="margin:10px 0 0 0; font-size:13px; line-height:1.5; color:var(--text);">
+      No human can see across all of them at once. So the leaks hide in the gaps.
+    </p>
+  </div>
+
+  <!-- Three Obstacles -->
+  <div class="obstacles-container">
+    
+    <!-- Obstacle 1 -->
+    <div class="obstacle-box obstacle-1">
+      <div class="obstacle-icon">
+        <svg fill="none" stroke="#0066FF" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1v-3z"/>
+        </svg>
+      </div>
+      <div class="obstacle-content">
+        <h3 class="obstacle-title">Scattered Data = Invisible Problems</h3>
+        <p class="obstacle-description">Your revenue intelligence is trapped in silos. No single person can see the full picture—so deals stall, unbilled hours pile up, and customer issues escalate before anyone sees the pattern.</p>
+        <div class="obstacle-stat">
+          <div style="display:flex; gap:16px; margin-bottom:8px;">
+            <div style="flex:1;">
+              <span class="stat-number">53%</span>
+              <div class="stat-text">Don't understand what insights their data could provide</div>
+            </div>
+            <div style="flex:1;">
+              <span class="stat-number">41%</span>
+              <div class="stat-text">Don't even trust their own data</div>
+            </div>
+          </div>
+          <div class="stat-source">AWS SMB Global Trends Survey, 2022</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Obstacle 2 -->
+    <div class="obstacle-box obstacle-2">
+      <div class="obstacle-icon">
+        <svg fill="none" stroke="#FF8C42" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <div class="obstacle-content">
+        <h3 class="obstacle-title">No Early Warning System</h3>
+        <p class="obstacle-description">By the time you see the problem, the money's already gone. You only spot leaks when they hit your P&L—weeks after they started bleeding.</p>
+        <div class="obstacle-stat">
+          <div style="display:flex; gap:16px; margin-bottom:8px;">
+            <div style="flex:1;">
+              <span class="stat-number">69%</span>
+              <div class="stat-text">Say manual expense and invoice solutions are "inefficient and laborious"</div>
+            </div>
+            <div style="flex:1;">
+              <span class="stat-number">60%</span>
+              <div class="stat-text">Report difficulty tracking spending trends and behaviors</div>
+            </div>
+          </div>
+          <div class="stat-source">SAP Concur / AMI Survey</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Obstacle 3 -->
+    <div class="obstacle-box obstacle-3">
+      <div class="obstacle-icon">
+        <svg fill="none" stroke="#22C55E" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+        </svg>
+      </div>
+      <div class="obstacle-content">
+        <h3 class="obstacle-title">Insight Without Action = Zero ROI</h3>
+        <p class="obstacle-description">Even when you spot a leak, you can't track if your fix worked. Without metrics showing if changes stick, the same problems persist quarter after quarter.</p>
+        <div class="obstacle-stat">
+          <div style="display:flex; gap:16px; margin-bottom:8px;">
+            <div style="flex:1;">
+              <span class="stat-number">45%</span>
+              <div class="stat-text">Do not measure ROI of their digital marketing efforts</div>
+            </div>
+            <div style="flex:1;">
+              <span class="stat-number">58%</span>
+              <div class="stat-text">Say they're not investing in data to drive growth</div>
+            </div>
+          </div>
+          <div class="stat-source">AWS SMB Global Trends Survey, 2022 / Digital Marketing ROI Guide</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Closing -->
+  <div style="margin-top: 18px; padding: 11px 15px; background: linear-gradient(135deg, #f0fdfa 0%, #e0f2f1 100%); border-radius: 8px; border-left: 4px solid var(--accent);">
+    <p style="margin:0; font-size:13px; font-weight:600; color:var(--text); line-height:1.45;">
+      The next 5 pages show you exactly which gaps are costing you $<span id="totalLossClosingP2">1.1M</span>—and how to close them in 90 days.
+    </p>
+  </div>
+
+  <footer>Page 2</footer>
 </div>
+
+
 
 <!-- ========== PAGES 3-8 ========== -->
-<!-- Include all remaining pages exactly as they are in your file -->
+<!-- ========== PAGE 3: Leak Breakdown (Part 1) ========== -->
+<div class="page" id="page-3">
+  <header>
+    <h1 style="font-size:20px; margin:0;">Your Diagnostic Found 12 Profit Leaks Totaling $<span id="totalLossP3">1,103,000</span></h1>
+    <div class="muted">Below are the top 3 bleeding fastest (68% of your total loss)</div>
+  </header>
 
+  <!-- Priority Overview Cards -->
+  <div style="margin: 30px 0;">
+    <div id="priorityCardsTop" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px;"></div>
+    <div id="priorityCardsBottom" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;"></div>
+    
+    <div style="text-align: center; padding: 16px; background: #fef2f2; border-radius: 6px; margin-top: 20px; border-left: 4px solid #c53030;">
+      <strong style="color: #c53030; font-size: 15px;">Top 3 leaks = $<span id="top3Total">732</span>K/year (<span id="top3Percent">66</span>% of your total loss) • Fix these first for maximum recovery</strong>
+    </div>
+  </div>
+
+  <!-- Only FIRST leak card here -->
+  <div id="top3LeaksContainerFirst"></div>
+
+  <footer>Page 3</footer>
 </div>
+
+<!-- ========== PAGE 4: Leak Breakdown (Part 2) ========== -->
+<div class="page" id="page-4">
+  <!-- Remaining 2 leak cards -->
+  <div id="top3LeaksContainerRest"></div>
+
+  <footer>Page 4</footer>
+</div>
+
+<!-- ========== PAGE 5: Other Leaks ========== -->
+<div class="page" id="page-5">
+  <header>
+    <h1 style="font-size:20px; margin:0;">The Other 9 Leaks We Found</h1>
+    <div class="muted">Lower priority but still worth tracking</div>
+  </header>
+
+  <!-- Other 9 Leaks Grid -->
+  <div id="otherLeaksGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 30px 0;"></div>
+
+  <!-- Summary Impact Box -->
+  <div style="margin-top: 32px; padding: 20px; background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); border-radius: 8px; border-left: 4px solid var(--danger);">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div style="flex: 1;">
+        <h3 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 700; color: var(--danger);">Why These 9 Matter More Than You Think</h3>
+        <p style="margin: 0; font-size: 13px; line-height: 1.6; color: var(--text);">
+          At <strong>$<span id="other9Total"></span>/year</strong>, these may seem secondary—but here's the catch: <strong>many of these leaks feed the top 3</strong>. Poor inventory management causes missed sales. Employee turnover kills operational efficiency. Tech downtime erodes customer trust. <strong>Without plugging these, your top 3 fixes won't stick.</strong> They're not just leaks—they're the hidden bottlenecks preventing full recovery.
+        </p>
+      </div>
+      <div style="text-align: center; padding: 0 20px; border-left: 2px solid #fecaca;">
+        <div style="font-size: 32px; font-weight: 800; color: var(--danger);">$<span id="other9TotalLarge"></span>K</div>
+        <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">Annual Loss</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transition to Next Section -->
+  <div style="margin-top: 28px; padding: 16px; background: #f0fdfa; border-radius: 8px; border-left: 4px solid var(--accent); text-align: center;">
+    <p style="margin: 0; font-size: 14px; font-weight: 600; color: var(--text);">
+      Next, let's look at how other companies have recovered from similar leaks...
+    </p>
+  </div>
+
+  <footer>Page 5</footer>
+</div>
+
+<!-- ========== PAGE 6: Our Track Record ========== -->
+<div class="page" id="page-6">
+  <header>
+    <h1 style="font-size:20px; margin:0;">Our Track Record: <span id="implCountHeader">50</span>+ Dashboard Implementations</h1>
+    <p style="font-size:13px; color:var(--muted); margin:6px 0 0 0;">Real results from companies who needed visibility into their revenue operations</p>
+  </header>
+
+  <h2 class="section-title">Our Experience Across Business Models</h2>
+  <p style="font-size:11px; color:var(--muted); margin:0 0 8px 0;">Over the past 3 years, we've built revenue intelligence dashboards for <span id="implCountText">50</span>+ companies across three core models:</p>
+  
+  <div style="margin-bottom:8px;">
+    <h3 style="font-size:12px; font-weight:700; color:var(--accent); margin:8px 0 6px 0;">High-Transaction Businesses</h3>
+    <div class="industry-list" style="gap:5px; margin-bottom:8px;">
+      <div class="industry-item">
+        <div class="checkmark">✓</div>
+        <div class="content">
+          <p class="industry-name">Quick-Service Restaurant Franchises (McDonald's franchise owners)</p>
+          <p class="industry-desc">Multi-location revenue tracking and upsell performance</p>
+        </div>
+      </div>
+      <div class="industry-item">
+        <div class="checkmark">✓</div>
+        <div class="content">
+          <p class="industry-name">Amazon FBA Businesses</p>
+          <p class="industry-desc">Inventory velocity and profitability by SKU</p>
+        </div>
+      </div>
+    </div>
+    
+    <h3 style="font-size:12px; font-weight:700; color:var(--accent); margin:8px 0 6px 0;">Service-Based Operations</h3>
+    <div class="industry-list" style="gap:5px; margin-bottom:8px;">
+      <div class="industry-item">
+        <div class="checkmark">✓</div>
+        <div class="content">
+          <p class="industry-name">Marketing Agencies</p>
+          <p class="industry-desc">Client profitability and resource utilization</p>
+        </div>
+      </div>
+      <div class="industry-item">
+        <div class="checkmark">✓</div>
+        <div class="content">
+          <p class="industry-name">Professional Services</p>
+          <p class="industry-desc">Unbilled time tracking and project margin analysis</p>
+        </div>
+      </div>
+    </div>
+    
+    <h3 style="font-size:12px; font-weight:700; color:var(--accent); margin:8px 0 6px 0;">Complex Supply Chains</h3>
+    <div class="industry-list" style="gap:5px; margin-bottom:8px;">
+      <div class="industry-item">
+        <div class="checkmark">✓</div>
+        <div class="content">
+          <p class="industry-name">Manufacturing</p>
+          <p class="industry-desc">Production efficiency and material waste tracking</p>
+        </div>
+      </div>
+      <div class="industry-item">
+        <div class="checkmark">✓</div>
+        <div class="content">
+          <p class="industry-name">Consumer Packaged Goods Distributors</p>
+          <p class="industry-desc">Distribution and inventory optimization</p>
+        </div>
+      </div>
+      <div class="industry-item">
+        <div class="checkmark">✓</div>
+        <div class="content">
+          <p class="industry-name">Tourism & Hospitality</p>
+          <p class="industry-desc">Customer acquisition costs and lifetime value</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="section-title" style="font-size:14px; font-weight:700;">What Our Dashboard Clients Say</h2>
+  
+  <div class="testimonial-grid">
+    <div class="testimonial-box">
+      <p class="testimonial-quote">"Shoab and his team helped us streamline our marketing, finance, and sales data with powerful dashboards. We now have clear visibility into performance and can make faster, smarter decisions. Highly recommend their work."</p>
+      <p class="testimonial-author">— Carl Solomon, The Solomon Law Group, LLC</p>
+      <div style="display:flex; gap:8px; margin-top:6px; margin-bottom:6px;">
+        <span style="background:#f0fdfa; padding:2px 6px; border-radius:4px; font-size:10px; color:var(--accent); font-weight:600;">Legal Dashboard</span>
+        <span style="background:#e0f2f1; padding:2px 6px; border-radius:4px; font-size:10px; color:#065f46; font-weight:600;">Multi-Department</span>
+      </div>
+      <div class="star-rating">
+        <span class="star">
+          <svg viewBox="0 0 24 24" class="star-filled">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </span>
+        <span class="star">
+          <svg viewBox="0 0 24 24" class="star-filled">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </span>
+        <span class="star">
+          <svg viewBox="0 0 24 24" class="star-filled">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </span>
+        <span class="star">
+          <svg viewBox="0 0 24 24" class="star-filled">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </span>
+        <span class="star">
+          <svg viewBox="0 0 24 24" class="star-filled">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </span>
+        <span class="rating-text">5.0/5</span>
+      </div>
+    </div>
+    
+    <div class="testimonial-box">
+      <p class="testimonial-quote">"Muhammad was patient and always willing to make any adjustments until I was satisfied with the outcome. I enjoyed working with him."</p>
+      <p class="testimonial-author">— Mareile Paley, Life in Movement</p>
+      <div style="display:flex; gap:8px; margin-top:6px; margin-bottom:6px;">
+        <span style="background:#f0fdfa; padding:2px 6px; border-radius:4px; font-size:10px; color:var(--accent); font-weight:600;">Data Visualization</span>
+        <span style="background:#e0f2f1; padding:2px 6px; border-radius:4px; font-size:10px; color:#065f46; font-weight:600;">4 weeks delivery</span>
+      </div>
+      <div class="star-rating">
+        <span class="star">
+          <svg viewBox="0 0 24 24" class="star-filled">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </span>
+        <span class="star">
+          <svg viewBox="0 0 24 24" class="star-filled">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </span>
+        <span class="star">
+          <svg viewBox="0 0 24 24" class="star-filled">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </span>
+        <span class="star">
+          <svg viewBox="0 0 24 24" class="star-filled">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </span>
+        <span class="star">
+          <svg viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="star-gradient-1">
+                <stop offset="80%" stop-color="#fbbf24"/>
+                <stop offset="80%" stop-color="#e5e7eb"/>
+              </linearGradient>
+            </defs>
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="url(#star-gradient-1)"/>
+          </svg>
+        </span>
+        <span class="rating-text">4.8/5</span>
+      </div>
+    </div>
+    
+    <div class="testimonial-box">
+      <p class="testimonial-quote">"Thanks again repeat client, glad I found Muhammad!"</p>
+      <p class="testimonial-author">— Stephen Burkhalter, Solcertain LLC</p>
+      <div style="display:flex; gap:8px; margin-top:6px; margin-bottom:6px;">
+        <span style="background:#f0fdfa; padding:2px 6px; border-radius:4px; font-size:10px; color:var(--accent); font-weight:600;">Stripe + QuickBooks</span>
+        <span style="background:#fef3c7; padding:2px 6px; border-radius:4px; font-size:10px; color:#92400e; font-weight:600;">Ongoing Partnership</span>
+      </div>
+      <div class="star-rating">
+        <span class="star">
+          <svg viewBox="0 0 24 24" class="star-filled">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </span>
+        <span class="star">
+          <svg viewBox="0 0 24 24" class="star-filled">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </span>
+        <span class="star">
+          <svg viewBox="0 0 24 24" class="star-filled">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </span>
+        <span class="star">
+          <svg viewBox="0 0 24 24" class="star-filled">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </span>
+        <span class="star">
+          <svg viewBox="0 0 24 24" class="star-filled">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </span>
+        <span class="rating-text">5.0/5</span>
+      </div>
+    </div>
+    
+    <div class="testimonial-box">
+      <p class="testimonial-quote">"I recently had the pleasure of working with Shoab and his incredible team on a KPI tracker using Google Looker, and I am beyond impressed..."</p>
+      <p class="testimonial-author">— Jonah Nimmer, Amazon Growth Lab</p>
+      <div style="display:flex; gap:8px; margin-top:6px; margin-bottom:6px;">
+        <span style="background:#f0fdfa; padding:2px 6px; border-radius:4px; font-size:10px; color:var(--accent); font-weight:600;">Google Looker</span>
+        <span style="background:#fef3c7; padding:2px 6px; border-radius:4px; font-size:10px; color:#92400e; font-weight:600;">KPI Tracking</span>
+      </div>
+      <div class="star-rating">
+        <span class="star">
+          <svg viewBox="0 0 24 24" class="star-filled">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </span>
+        <span class="star">
+          <svg viewBox="0 0 24 24" class="star-filled">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </span>
+        <span class="star">
+          <svg viewBox="0 0 24 24" class="star-filled">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </span>
+        <span class="star">
+          <svg viewBox="0 0 24 24" class="star-filled">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </span>
+        <span class="star">
+          <svg viewBox="0 0 24 24" class="star-filled">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </span>
+        <span class="rating-text">5.0/5</span>
+      </div>
+    </div>
+  </div>
+
+  <footer>Page 6</footer>
+</div>
+
+<!-- ========== PAGE 7: Competitive Position & Patterns ========== -->
+<div class="page" id="page-7">
+  <h2 class="section-title" style="font-size:15px; font-weight:700; margin:0 0 10px 0;">Where You Stand vs. Your Competition</h2>
+  
+  <div style="display:flex; gap:10px; margin-bottom:14px;">
+    <div style="flex:1; padding:10px; background:#fef2f2; border-radius:6px; border-left:4px solid var(--danger); position:relative;">
+      <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+        <span style="font-size:20px;">🔴</span>
+        <span style="font-size:12px; font-weight:700; color:var(--danger);">DANGER ZONE (15%+)</span>
+      </div>
+      <div style="font-size:14px; font-weight:800; color:var(--danger);">You're here at <span id="yourLeakageP7">17.1</span>%</div>
+      <div style="font-size:10px; color:var(--muted); margin-top:2px;">Bleeding cash, can't invest in growth</div>
+    </div>
+    
+    <div style="flex:1; padding:10px; background:#f0fdfa; border-radius:6px; border-left:4px solid var(--accent); position:relative;">
+      <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+        <span style="font-size:20px;">✅</span>
+        <span style="font-size:12px; font-weight:700; color:var(--accent);">BEST-IN-CLASS (<10%)</span>
+      </div>
+      <div style="font-size:14px; font-weight:800; color:var(--accent);">Top performers achieved this</div>
+      <div style="font-size:10px; color:var(--muted); margin-top:2px;">7% more to reinvest, hit growth targets</div>
+    </div>
+  </div>
+  
+  <div style="padding:8px 12px; background:#f9fafb; border-radius:6px; margin-bottom:14px;">
+    <p style="margin:0; font-size:11px; color:var(--text); font-style:italic; text-align:center;">
+      <strong>"The specific leaks vary by industry, but the total damage is universal."</strong>
+    </p>
+  </div>
+
+  <h2 class="section-title" style="font-size:15px; font-weight:800; color:#00b7b7; margin:0 0 5px 0; padding:5px 0; border-top:2px solid #f0fdfa;">Common Revenue Leak Patterns We've Uncovered</h2>
+  <p style="font-size:11px; color:var(--text); font-weight:500; margin:0 0 10px 0;">Based on our implementations across industries, here are the most frequent blind spots we help companies see:</p>
+  
+  <div class="patterns-container">
+    <div class="pattern-category">
+      <div class="pattern-header">
+        <h3 class="pattern-title">Sales & Revenue Leaks</h3>
+        <span class="pattern-benchmark">Industry benchmark: 15-25% of pipeline value</span>
+      </div>
+      <ul class="pattern-list">
+        <li>Stalled deals with no follow-up cadence</li>
+        <li>Proposal-to-close gaps that aren't tracked</li>
+        <li>Lost opportunities due to slow response times</li>
+      </ul>
+    </div>
+    
+    <div class="pattern-category">
+      <div class="pattern-header">
+        <h3 class="pattern-title">Financial Leaks</h3>
+        <span class="pattern-benchmark">Industry benchmark: 5-15% of receivables</span>
+      </div>
+      <ul class="pattern-list">
+        <li>Overdue invoices with no systematic follow-up</li>
+        <li>Pricing inconsistencies across customers</li>
+        <li>Unbilled services or forgotten scope changes</li>
+      </ul>
+    </div>
+
+    <div class="pattern-category">
+        <div class="pattern-header">
+          <h3 class="pattern-title">Operational Inefficiency</h3>
+          <span class="pattern-benchmark">Industry benchmark: 12-20% of operating costs</span>
+        </div>
+        <ul class="pattern-list">
+          <li>Manual handoffs eating high-cost labor hours</li>
+          <li>No visibility into actual time spent vs. billed</li>
+          <li>Process bottlenecks that aren't measured</li>
+        </ul>
+    </div>
+      
+    <div class="pattern-category">
+        <div class="pattern-header">
+          <h3 class="pattern-title">Customer Retention</h3>
+          <span class="pattern-benchmark">Industry benchmark: 15-30% annual churn</span>
+        </div>
+        <ul class="pattern-list">
+            <li>No early warning system for at-risk accounts</li>
+            <li>Reactive rather than proactive retention efforts</li>
+            <li>Missing renewal signals until it's too late</li>
+        </ul>
+    </div>
+  </div>
+
+  <div class="why-choose-box">
+    <h3 class="why-choose-title">Why Companies Choose Us:</h3>
+    <div class="why-list">
+      <div class="why-item">
+        <span class="check">✓</span>
+        <span class="text"><strong>Cross-industry experience</strong> - We've seen patterns across <span id="implCountWhy">50</span>+ implementations</span>
+      </div>
+      <div class="why-item">
+        <span class="check">✓</span>
+        <span class="text"><strong>You own the system</strong> - No ongoing dependency, full team training included</span>
+      </div>
+      <div class="why-item">
+        <span class="check">✓</span>
+        <span class="text"><strong>Proven track record</strong> - 5.0 average rating across platforms</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bridge-box">
+    <p class="bridge-text">
+      <span style="font-size:18px;">→</span><br>
+      You've seen <span class="bridge-highlight">$<span id="totalLossBridge">1.1</span>M in hidden leaks</span> and <span class="bridge-highlight"><span id="implCountBridge">50</span>+ successful implementations</span><br><br>
+      <strong>Your choice: Continue losing ~$90K/month, or fix it in 90 days.</strong><br>
+      <span style="font-size:11px; margin-top:6px; display:block;">Next: See exactly what this costs vs. alternatives →</span>
+    </p>
+  </div>
+
+  <footer>Page 7</footer>
+</div>
+
+<!-- ========== PAGE 8: Recovery Economics ========== -->
+<div class="page" id="page-8">
+    <header>
+      <h1 style="font-size:20px; margin:0;">Your 12-Month ROI Comparison</h1>
+      <div class="muted">What you gain (or lose) based on your choice</div>
+    </header>
+
+    <table class="roi-table" style="margin-top:16px;">
+      <thead>
+        <tr>
+          <th style="width:120px;">Option</th>
+          <th style="width:150px;">Investment / Cost (1-Year Impact)</th>
+          <th style="width:60px;">Timeline</th>
+          <th>Outcome / Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:18px;">❌</span>
+              <strong>Do Nothing</strong>
+            </div>
+          </td>
+          <td style="color:var(--danger); font-weight:700;">– $<span id="doNothingLossP8"></span> Lost</td>
+          <td>&infin;</td>
+          <td>Continue losing revenue month after month</td>
+        </tr>
+        
+        <tr>
+          <td>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:18px;">🧾</span>
+              <strong>Hire Consultant</strong>
+            </div>
+          </td>
+          <td>$<span id="consultantCostP8"></span> – $<span id="consultantCostMaxP8"></span> Spend</td>
+          <td>9 – 14 months</td>
+          <td>
+            Strategy deck + partial implementation <span style="font-style:italic;">(no performance tie-in)</span><br>
+            <span class="muted">25 – 40% recovery · High cost, uncertain</span>
+          </td>
+        </tr>
+        
+        <tr>
+          <td>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:18px;">🛠</span>
+              <strong>Internal Fix</strong>
+            </div>
+          </td>
+          <td>$<span id="internalCostP8"></span> Real Cost (800+ hrs)</td>
+          <td>12 – 18 months</td>
+          <td>
+            DIY implementation · 28% success rate <span style="font-style:italic;">(most stall)</span> · Slow, uncertain progress
+          </td>
+        </tr>
+        
+        <tr style="background:#f0fdfa;">
+          <td>
+            <div style="display:flex; align-items:flex-start; gap:8px;">
+              <span style="font-size:18px;">💡</span>
+              <div>
+                <strong style="color:var(--accent);">Mainnov Revenue Leak Detector</strong><br>
+                <span style="font-size:11px;">🏆 Fastest ROI & Lowest Risk</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div style="display:flex; align-items:flex-start; gap:6px;">
+              <span style="font-size:16px;">💼</span>
+              <div>
+                <strong>Typical Investment:</strong><br>
+                $<span id="week1PayP8"></span> – $<span id="mainnovInvestP8"></span><br>
+                <span class="muted" style="font-size:11px;">(based on data scope)</span>
+              </div>
+            </div>
+          </td>
+          <td><strong style="color:var(--accent);">90 days</strong></td>
+          <td>
+            <strong>Pinpoint up to 8 revenue leaks</strong> — with a clear path to recovery<br><br>
+            <div style="display:flex; align-items:flex-start; gap:6px; margin-top:8px;">
+              <span style="font-size:16px;">💰</span>
+              <div>
+                <strong style="color:var(--accent);">Guaranteed to uncover at least 5× your investment in hidden revenue leaks — or it's on us.</strong>
+              </div>
+            </div>
+            <div style="margin-top:10px; padding:10px; background:#e6fffa; border-radius:6px; border-left:3px solid var(--accent);">
+              <strong style="color:var(--accent);">Projected ROI:</strong> +$<span id="conservRecovP8"></span> – $<span id="probRecovP8"></span><br> (<span id="roiRangeP8"></span>× return)
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  <div style="margin-top:20px; padding:14px; background:#fef2f2; border-left:4px solid var(--danger); border-radius:6px;">
+    <strong style="font-size:15px;">The Cost of Waiting:</strong>
+    <ul style="margin:8px 0 0 0; padding-left:20px; font-size:13px;">
+      <li>Today: $<span id="annualLossP8"></span> annual leak</li>
+      <li>Wait 1 month: $<span id="monthLossP8"></span> more lost</li>
+      <li>Wait 1 quarter: $<span id="quarterLossP8"></span> more lost</li>
+    </ul>
+    <p style="margin:8px 0 0 0; font-size:14px; font-weight:600;">Every day you delay is $<span id="dailyLossP8"></span> in leakage.</p>
+  </div>
+
+  <div style="margin-top:20px; text-align:center;">
+    <p style="font-size:16px; font-weight:600; color:var(--text); margin:0 0 16px 0; line-height:1.4;">
+      Let's identify where your profit is leaking — before your next quarter closes.
+    </p>
+    <a class="cta" href="https://calendly.com/ds-shoab/30min" target="_blank" style="font-size:16px; padding:14px 28px;">
+      Book Your Free Diagnostic Call
+    </a>
+    <p class="muted" style="margin-top:10px; font-size:13px;">
+      Zero obligation. If we can't show you a clear 10x ROI path in 30 minutes,<br>we'll point you to someone who can.
+    </p>
+  </div>
+
+  <footer>Page 8</footer>
+</div>
+
+<!-- ========== PAGE 9: What Happens When You Book ========== -->
+ <!--
+<div class="page" id="page-9">
+  <header>
+    <h1 style="font-size:22px; margin:0;">What Happens When You Book</h1>
+    <div class="muted">Your 90-day recovery roadmap</div>
+  </header>
+
+  <div style="margin-top:20px;">
+    <div style="padding:16px; border-left:4px solid var(--accent); background:#f0fdfa; border-radius:6px; margin-bottom:14px;">
+      <div style="display:flex; gap:12px; align-items:flex-start;">
+        <div style="font-size:28px;">📞</div>
+        <div style="flex:1;">
+          <strong style="font-size:16px; color:var(--accent);">THIS WEEK: 30-Minute Diagnostic Call</strong>
+          <p style="margin:6px 0 0 0; font-size:13px;">
+            We'll validate your top 3 leaks and show you one quick-win fix (we'll implement it during the call if it's software-based)
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:16px; border-left:4px solid #ff8c42; background:#fff7ed; border-radius:6px; margin-bottom:14px;">
+      <div style="display:flex; gap:12px; align-items:flex-start;">
+        <div style="font-size:28px;">🔍</div>
+        <div style="flex:1;">
+          <strong style="font-size:16px; color:#ff8c42;">WEEK 1: Deep-Dive Leak Audit</strong>
+          <p style="margin:6px 0 8px 0; font-size:13px;">Our team analyzes your actual data (CRM, financials, ops workflows)</p>
+          
+          <div style="background:#fff; padding:10px; border-radius:6px; margin-top:8px;">
+            <strong style="font-size:12px;">You receive:</strong>
+            <ul style="margin:4px 0 0 0; padding-left:20px; font-size:12px;">
+              <li>18-page detailed leak analysis</li>
+              <li>Custom 90-day recovery roadmap</li>
+              <li>ROI projections by leak category</li>
+            </ul>
+          </div>
+          
+          <div style="margin-top:10px; padding:10px; background:#fef2f2; border-radius:6px;">
+            <strong style="font-size:13px; color:var(--danger);">Decision point: Proceed or part ways</strong>
+            <p style="margin:4px 0 0 0; font-size:12px; color:var(--muted);">(If we can't show 10x ROI potential, we refund Week 1)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:16px; border-left:4px solid #22c55e; background:#f0fdf4; border-radius:6px;">
+      <div style="display:flex; gap:12px; align-items:flex-start;">
+        <div style="font-size:28px;">🛠️</div>
+        <div style="flex:1;">
+          <strong style="font-size:16px; color:#22c55e;">WEEKS 2-12: Implementation Sprints</strong>
+          <p style="margin:6px 0 8px 0; font-size:13px;">We deploy recovery systems in this sequence:</p>
+          
+          <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px;">
+            <div style="display:flex; gap:10px; align-items:center;">
+              <div style="width:8px; height:8px; border-radius:50%; background:#0066FF;"></div>
+              <span style="font-size:13px;"><strong>Days 8-21:</strong> Sales recovery</span>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <div style="width:8px; height:8px; border-radius:50%; background:#FF8C42;"></div>
+              <span style="font-size:13px;"><strong>Days 22-42:</strong> Ops efficiency</span>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <div style="width:8px; height:8px; border-radius:50%; background:#22C55E;"></div>
+              <span style="font-size:13px;"><strong>Days 43-63:</strong> Retention defense</span>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <div style="width:8px; height:8px; border-radius:50%; background:#8A2BE2;"></div>
+              <span style="font-size:13px;"><strong>Days 64-90:</strong> Monitoring + team training</span>
+            </div>
+          </div>
+          
+          <div style="background:#fff; padding:10px; border-radius:6px; margin-top:12px;">
+            <strong style="font-size:12px;">You get:</strong>
+            <ul style="margin:4px 0 0 0; padding-left:20px; font-size:12px;">
+              <li>Weekly progress reports</li>
+              <li>Real-time recovery tracking</li>
+              <li>Direct Slack/email access to your implementation lead</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:24px; text-align:center; padding:20px; background:linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%); border-radius:8px;">
+    <a class="cta" href="https://calendly.com/ds-shoab/30min" target="_blank" style="font-size:18px; padding:16px 32px; display:inline-block;">
+      📞 Book Your Free Diagnostic Call
+    </a>
+    <p class="muted" style="margin-top:12px; font-size:13px;">
+      https://calendly.com/ds-shoab/30min
+    </p>
+    
+    <div style="margin-top:16px; padding-top:16px; border-top:1px solid #99f6e4;">
+      <p style="font-size:13px; color:var(--muted); font-style:italic; margin:0;">
+        <strong>P.S.</strong> The companies that recover fastest share one trait: they book within 48 hours of seeing their leak report. Not because they're impulsive, but because they immediately recognize what's been costing them.
+      </p>
+      <p style="font-size:13px; color:var(--text); margin:6px 0 0 0;">
+        If you're still here reading this, you already know.
+      </p>
+    </div>
+  </div>
+
+  <footer>Page 9</footer>
+</div>
+-->
 
 <!-- ========== REPLACE ALL THE <script> CONTENT WITH THIS ========== -->
 <script>
