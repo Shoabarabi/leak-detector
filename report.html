@@ -1539,12 +1539,37 @@ async function fetchReportData(sessionId) {
 }
 
 // Populate report with data
+
 function populateReport(data) {
-  console.log('Populating with data:', data);
-  console.log('API leaks:', data.leaks);
+  console.log('🔍 Populating with data:', data);
+  console.log('🔍 Type of data.leaks:', typeof data.leaks);
+  console.log('🔍 Is array?', Array.isArray(data.leaks));
+  console.log('🔍 Full data.leaks:', data.leaks);
+  
+  // SAFETY CHECK: Ensure data.leaks is an array
+  let leaksArray = [];
+  
+  if (Array.isArray(data.leaks)) {
+    // Already an array
+    leaksArray = data.leaks;
+  } else if (data.leaks && typeof data.leaks === 'object') {
+    // It's an object, convert to array
+    leaksArray = Object.entries(data.leaks).map(([category, value]) => ({
+      category: category,
+      leakageDollars: typeof value === 'object' ? value.leakageDollars : value,
+      leakagePercent: typeof value === 'object' ? value.leakagePercent : 0
+    }));
+  } else {
+    console.error('❌ ERROR: data.leaks is neither array nor object:', data.leaks);
+    alert('Error: Invalid data format received from server');
+    return;
+  }
+  
+  console.log('✅ Converted leaksArray:', leaksArray);
   
   // Start with API data and enhance with descriptions
-  const sortedLeaks = [...data.leaks].sort((a, b) => b.leakageDollars - a.leakageDollars);
+  const sortedLeaks = leaksArray.sort((a, b) => b.leakageDollars - a.leakageDollars);
+
   
   const leaksWithData = sortedLeaks.map(leak => {
     const description = allLeaksData.find(desc => desc.name === leak.category) || {};
