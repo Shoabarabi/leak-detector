@@ -1573,31 +1573,32 @@ async function fetchReportData(sessionId) {
 // ========================================
 // POPULATE REPORT WITH DATA
 // ========================================
-
 function populateReport(data) {
   console.log('Populating with data:', data);
+  console.log('API leaks:', data.leaks); // Debug
   
-  // Convert leaks array to object for easier lookup
-  const leaksMap = {};
-  if (Array.isArray(data.leaks)) {
-    data.leaks.forEach(leak => {
-      leaksMap[leak.category] = leak.leakageDollars;
-    });
-  }
+  // STEP 1: Start with API data (which has the actual dollar values)
+  const sortedLeaks = [...data.leaks].sort((a, b) => b.leakageDollars - a.leakageDollars);
   
-  console.log('Leaks map:', leaksMap); // Debug line
-  
-  // Map API leak values to hardcoded descriptions
-  const leaksWithData = allLeaksData.map(leak => {
+  // STEP 2: Enhance each leak with descriptions from allLeaksData
+  const leaksWithData = sortedLeaks.map(leak => {
+    // Find matching description by category name
+    const description = allLeaksData.find(desc => desc.name === leak.category) || {};
+    
     return {
-      ...leak,
-      value: leaksMap[leak.name] || 0  // Now using the leaksMap object
+      name: leak.category,
+      shortName: leak.category.split(' ')[0],
+      value: leak.leakageDollars,
+      color: description.color || '#0066FF',
+      problemFeeling: description.problemFeeling || 'No description available',
+      whatsCantSee: description.whatsCantSee || '',
+      cantSeeBullets: description.cantSeeBullets || [],
+      tracking: description.tracking || '',
+      mainCause: description.mainCause || ''
     };
   });
-
-
-
-
+  
+  console.log('Enhanced leaks:', leaksWithData); // Debug
   
   // Calculate values
   const dailyLoss = Math.round(data.totalLeakageDollars / 365);
@@ -1637,13 +1638,10 @@ function populateReport(data) {
   // Page 3
   setText('totalLossP3', (totalLoss / 1000000).toFixed(1) + 'M');
   
-  // Sort leaks by value
-  // Sort leaks by value (using API values)
-  const sortedLeaks = [...leaksWithData].sort((a, b) => b.value - a.value);
-  
-  const top8Leaks = sortedLeaks.slice(0, 8);
-  const top3Leaks = sortedLeaks.slice(0, 3);
-  const otherLeaks = sortedLeaks.slice(3);
+  // Sort leaks by value (already sorted from API)
+  const top8Leaks = leaksWithData.slice(0, 8);
+  const top3Leaks = leaksWithData.slice(0, 3);
+  const otherLeaks = leaksWithData.slice(3);
   
   // Top 3
   const top3Total = top3Leaks.reduce((sum, leak) => sum + leak.value, 0);
@@ -1695,6 +1693,9 @@ function populateReport(data) {
   // Initialize charts
   initializeCharts(data);
 }
+
+
+
 
 // ========================================
 // BUILD PRIORITY CARDS (Page 3)
