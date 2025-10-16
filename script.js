@@ -1705,6 +1705,41 @@ async function handleInlineEmailSubmit(result) {
     return;
   }
 
+  // Email was already sent from calculateLeakage()
+  // Just show success message and display full results
+  
+  showLoading('Opening your full report...');
+  
+  // Wait a moment for visual feedback
+  await new Promise(resolve => setTimeout(resolve, 800));
+  
+  hideLoading();
+  
+  // Show success message
+  alert(`✓ Report sent to ${email}!\n\nCheck your inbox for the full analysis with both the report link and booking calendar.`);
+  
+  // Show full results screen
+  hideAllScreens();
+  document.getElementById('results-screen').classList.add('active');
+  displayFullResults(currentResults);
+}
+
+
+
+/*
+async function handleInlineEmailSubmit(result) {
+  let email = document.getElementById('inline-report-email').value;
+  
+  if (!email && userData.email) {
+    email = userData.email;
+    document.getElementById('inline-report-email').value = email;
+  }
+  
+  if (!email || !email.includes('@')) {
+    alert('Please enter a valid email address');
+    return;
+  }
+
   try {
     showLoading('Generating your personalized report...');
 
@@ -1747,6 +1782,8 @@ async function handleInlineEmailSubmit(result) {
     alert('Error sending report: ' + error.message);
   }
 }
+*/
+
 
 
 // Display full results after email
