@@ -1411,7 +1411,7 @@ const allLeaksData = [
     mainCause: "Late payments and poor invoice follow-up."
   },
   {
-    name: "Marketing Inefficiency",
+    name: "Marketing Spend",
     shortName: "Marketing",
     color: "#0EA5A4",
     problemFeeling: "You spend heavily on ads, events, and content — but can't prove what's working. Leads look random and ROI feels invisible.",
@@ -1439,34 +1439,6 @@ const allLeaksData = [
     mainCause: "Poor engagement visibility and reactive retention."
   },
   {
-    name: "Pricing Errors & Discounts",
-    shortName: "Pricing",
-    color: "#D946EF",
-    problemFeeling: "Reps discount too deeply \"just to close,\" eroding margin. No one knows what discount levels are truly needed to win.",
-    whatsCantSee: "Many reps over-discount by 15–30%, quietly eroding 3–7% of annual margin — Bain and HubSpot note most firms lack visibility into discounting behavior.",
-    cantSeeBullets: [
-      "Who's over-discounting",
-      "How much margin is lost",
-      "What discount level closes most deals"
-    ],
-    tracking: "Smart discount guardrails showing \"deals like this close at 12% off.\" Protect margin without slowing sales.",
-    mainCause: "Over-discounting due to lack of deal insights."
-  },
-  {
-    name: "Supplier Inefficiencies",
-    shortName: "Suppliers",
-    color: "#7C3AED",
-    problemFeeling: "Supplier prices creep up over time. You suspect overpayment but lack data to negotiate.",
-    whatsCantSee: "Companies that skip annual supplier benchmarking overpay 8–15% — Deloitte and CIPS research confirm consistent savings when rates are reviewed regularly.",
-    cantSeeBullets: [
-      "Which suppliers charge above market",
-      "Where renegotiation yields biggest savings",
-      "Whether volume justifies better terms"
-    ],
-    tracking: "Supplier cost benchmarking dashboards with market-rate comparisons. Negotiate from data, not guesswork.",
-    mainCause: "Outdated contracts and unbenchmarked supplier pricing."
-  },
-  {
     name: "Compliance & Regulatory",
     shortName: "Compliance",
     color: "#DC2626",
@@ -1479,20 +1451,6 @@ const allLeaksData = [
     ],
     tracking: "Automated compliance calendars with proactive alerts 60, 30, and 7 days out. Stay compliant without chaos.",
     mainCause: "Missed deadlines and manual tracking errors."
-  },
-  {
-    name: "Customer Support",
-    shortName: "Support",
-    color: "#06B6D4",
-    problemFeeling: "Tickets pile up and VIP clients wait too long. You can't see which issues are driving churn or repeat complaints.",
-    whatsCantSee: "Average first-response times hover around 12–24 hours — Zendesk and HubSpot data show delays like these drive churn among high-value clients.",
-    cantSeeBullets: [
-      "Which support issues cause churn",
-      "How quickly VIPs are helped",
-      "Root causes of repeat issues"
-    ],
-    tracking: "Smart ticket routing that auto-prioritizes high-value customers. Track resolution time vs. retention impact.",
-    mainCause: "Slow response times for key clients."
   },
   {
     name: "Tech Downtime",
@@ -1521,8 +1479,54 @@ const allLeaksData = [
     ],
     tracking: "Demand forecasting that predicts what to order, when, and what to clear. Stop guessing, start optimizing.",
     mainCause: "Poor forecasting and no real-time stock visibility."
+  },
+  {
+    name: "Procurement Overspend",
+    shortName: "Procurement",
+    color: "#7C3AED",
+    problemFeeling: "You suspect you're overpaying vendors but lack the data to negotiate better rates. Prices creep up year after year.",
+    whatsCantSee: "Companies that skip annual supplier benchmarking overpay 5–15% — Deloitte procurement studies show most SMBs accept vendor pricing without market comparison.",
+    cantSeeBullets: [
+      "Which vendors charge above market rates",
+      "Where renegotiation would yield biggest savings",
+      "Whether your volume justifies better pricing tiers"
+    ],
+    tracking: "Vendor cost benchmarking dashboards showing market-rate comparisons. Negotiate from strength, not guesswork.",
+    mainCause: "No systematic vendor rate comparison or benchmarking."
+  },
+  {
+    name: "Project Overruns",
+    shortName: "Projects",
+    color: "#FB923C",
+    problemFeeling: "Projects consistently run over budget with no early warning. By the time you notice, it's too late to course-correct.",
+    whatsCantSee: "PMI research shows 43% of projects exceed budget, and early detection could prevent 40–60% of overruns — but most SMBs track spend only at month-end.",
+    cantSeeBullets: [
+      "Which projects are trending over budget right now",
+      "Where scope creep is happening in real-time",
+      "Whether your estimates are consistently accurate"
+    ],
+    tracking: "Real-time project budget burn dashboards with weekly variance alerts. Catch overruns before they spiral.",
+    mainCause: "Poor project tracking and no real-time burn rate visibility."
+  },
+  {
+    name: "Supplier/Contract Leakage",
+    shortName: "Contracts",
+    color: "#059669",
+    problemFeeling: "Auto-renewed contracts and forgotten subscriptions silently drain cash. You're paying for services no one uses.",
+    whatsCantSee: "Average company wastes 5–10% of supplier spend on unused subscriptions and auto-renewed contracts — Gartner data shows most firms lack centralized contract tracking.",
+    cantSeeBullets: [
+      "Which contracts auto-renewed without review",
+      "What services aren't being used",
+      "Where duplicate spending exists across departments"
+    ],
+    tracking: "Contract management dashboard with 90/60/30-day renewal alerts and usage tracking. Stop paying for what you don't use.",
+    mainCause: "No centralized contract tracking or usage monitoring."
   }
 ];
+
+
+
+
 
 // API URL
 const API_URL = 'https://leakdetector.mainnov.tech/proxy.php';
@@ -1654,8 +1658,18 @@ function populateReport(data) {
   setText('top3Percent', top3Percent);
   
   const other9Total = otherLeaks.reduce((sum, leak) => sum + leak.value, 0);
-  setText('other9Total', (other9Total / 1000).toFixed(0) + 'K');
-  setText('other9TotalLarge', (other9Total / 1000).toFixed(0));
+  // Format as M if over 1 million, otherwise K
+  const formatted = other9Total >= 1000000 
+    ? (other9Total / 1000000).toFixed(1) + 'M' 
+    : (other9Total / 1000).toFixed(0) + 'K';
+
+  const formattedLarge = other9Total >= 1000000 
+    ? (other9Total / 1000000).toFixed(1) 
+    : (other9Total / 1000).toFixed(0);
+
+  setText('other9Total', formatted);
+  setText('other9TotalLarge', formattedLarge);
+  
   
   // Page 7
   setText('yourLeakageP7', leakagePercent.toFixed(1));
@@ -1725,7 +1739,8 @@ function buildPriorityCards(top8Leaks) {
     card.innerHTML = `
       <div style="font-size: 10px; font-weight: 700; color: ${style.text}; margin-bottom: 6px; text-transform: uppercase;">Priority #${idx + 1}</div>
       <div style="font-size: 22px; font-weight: 800; color: ${style.border};">$${(leak.value / 1000).toFixed(0)}K</div>
-      <div style="font-size: 11px; color: #6b7280; margin-top: 4px;">${leak.shortName}</div>
+      <div style="font-size: 10px; color: #6b7280; margin-top: 4px; line-height: 1.2;">${leak.name}</div>
+      
     `;
     
     if (idx < 4) {
