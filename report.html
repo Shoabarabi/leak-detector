@@ -1660,6 +1660,7 @@ function populateReport(data) {
   setText('top3Percent', top3Percent);
   
   const other9Total = otherLeaks.reduce((sum, leak) => sum + leak.value, 0);
+  const unit = other9Total >= 1000000 ? 'M' : 'K';
   // Format as M if over 1 million, otherwise K
   const formatted = other9Total >= 1000000 
     ? (other9Total / 1000000).toFixed(1) + 'M' 
