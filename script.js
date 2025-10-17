@@ -1911,7 +1911,7 @@ function startOver() {
 }
 
 function requestAudit() {
-  window.open('calendly.com/ds-shoab/30min', '_blank');
+  window.open('https://calendly.com/ds-shoab/30min', '_blank');
 }
 
 // Enhanced email capture modal
