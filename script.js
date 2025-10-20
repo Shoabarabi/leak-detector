@@ -1706,6 +1706,19 @@ async function handleInlineEmailSubmit(result) {
     alert('Please enter a valid email address');
     return;
   }
+  // If email is different from original, update it in the sheet
+  if (formEmail !== userData.email) {
+    // Send update to backend
+    fetch(API_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        action: 'updateFinalEmail',
+        sessionId: sessionId,
+        finalEmail: formEmail
+      })
+    }).catch(error => console.error('Email update error:', error));
+  }
   
  
 
