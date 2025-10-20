@@ -379,7 +379,8 @@ function calculateResults() {
   console.log('Sending to backend:', {
     name: userData.name,
     company: userData.company,
-    email: userData.email
+    email: userData.email,
+    formEmail: userData.email
   });
   
   showLoading('Analyzing your profit leaks...');
@@ -1693,17 +1694,20 @@ function drawPieChart(leakPercentage) {
 // Handle inline email submission
 // REPLACE YOUR EXISTING handleInlineEmailSubmit FUNCTION WITH THIS
 async function handleInlineEmailSubmit(result) {
-  let email = document.getElementById('inline-report-email').value;
-  
-  if (!email && userData.email) {
-    email = userData.email;
-    document.getElementById('inline-report-email').value = email;
+  let formEmail = document.getElementById('inline-report-email').value;
+  //let formEmail = document.getElementById('inline-report-email').value;
+
+  if (!formEmail && userData.email) {
+    formEmail = userData.email;
+    document.getElementById('inline-report-email').value = formEmail;
   }
   
-  if (!email || !email.includes('@')) {
+  if (!formEmail || !formEmail.includes('@')) {
     alert('Please enter a valid email address');
     return;
   }
+  
+ 
 
   // Email was already sent from calculateLeakage()
   // Just show success message and display full results
@@ -1716,7 +1720,8 @@ async function handleInlineEmailSubmit(result) {
   hideLoading();
   
   // Show success message
-  alert(`✓ Report sent to ${email}!\n\nCheck your inbox for the full analysis with both the report link and booking calendar.`);
+  alert(`✓ Report sent to ${formEmail}!\n\nCheck your inbox for the full analysis with both the report link and booking calendar.`);
+  //alert(`✓ Report sent to ${email}!\n\nCheck your inbox for the full analysis with both the report link and booking calendar.`);
   
   // Show full results screen
   hideAllScreens();
