@@ -599,6 +599,18 @@
       gap: 10px;
     }
   }
+
+  @media (max-width: 480px) {
+    div[style*="position:relative"][style*="360px"] {
+      width: 280px !important;
+      height: 280px !important;
+      margin: 40px auto 30px auto !important;
+      aspect-ratio: auto !important;
+    }
+  }
+
+
+
 </style>
 </head>
 <body>
@@ -652,8 +664,8 @@
   <section aria-labelledby="exec-headline">
     
     <!-- DONUT CHART - Centered at top  -->
+    <div style="text-align:center; margin:80px auto 50px auto; position:relative; width:100%; max-width:360px; height:auto; aspect-ratio:1;"></div>
 
-    <div style="text-align:center; margin:80px auto 50px auto; position:relative; width:360px; height:360px;">
         <canvas id="donutPage1"></canvas>
         
         <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); text-align:center; pointer-events: none;">
