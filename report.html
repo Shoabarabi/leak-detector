@@ -29,6 +29,36 @@
 
   html,body{height:100%; margin:0; font-family:Inter,system-ui,-apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased;}
   .page{
+    width:100%;
+    max-width:var(--page-width);
+    box-sizing:border-box;
+    margin:20px auto;
+    padding:36px 46px;
+    background:var(--card);
+    border:1px solid #e8e8ea;
+    border-radius:8px;
+    box-shadow:0 10px 30px rgba(16,24,40,0.06);
+    position:relative;
+    page-break-after:always;
+  }
+
+  @media (max-width: 768px) {
+    .page {
+      padding: 20px 16px;
+      margin: 10px auto;
+      border-radius: 4px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page {
+      padding: 16px 12px;
+      margin: 5px auto;
+    }
+  }
+  
+  /*
+  .page{
     width:var(--page-width);
     height:var(--page-height);
     box-sizing:border-box;
@@ -40,13 +70,19 @@
     box-shadow:0 10px 30px rgba(16,24,40,0.06);
     position:relative;
     page-break-after:always;
-  }
+  }*/
   
   /* ... ALL YOUR OTHER EXISTING STYLES ... */
   /* I'm keeping this short, but you need to include ALL styles from your file */
   
   header{display:flex; justify-content:space-between; align-items:center; gap:18px; margin-bottom:18px;}
   h1{font-size:20px; margin:0; font-weight:700;}
+  @media (max-width: 480px) {
+    h1 { font-size: 18px; }
+    h2 { font-size: 16px; }
+    h3 { font-size: 14px; }
+    p { font-size: 13px; }
+  }
   .muted{color:var(--muted); font-size:13px;}
   
   :root{
@@ -96,8 +132,26 @@
   }
   .muted{color:var(--muted); font-size:13px;}
 
-  .chart-area{width:320px; text-align:center;}
-  canvas{display:block; margin:0 auto; max-width:100%; max-width:100%;}
+  
+  .chart-area{
+    width:100%;
+    max-width:320px;
+    text-align:center;
+    margin:0 auto;
+  }
+
+  @media (max-width: 480px) {
+    .chart-area {
+      max-width:240px;
+    }
+  }
+
+  canvas{
+    display:block; 
+    margin:0 auto; 
+    max-width:100%;
+    height:auto;
+  }
 
   .rec-list{display:flex; flex-direction:column; gap:12px; margin-top:8px;}
   .rec{display:flex; gap:16px; align-items:flex-start; border-left:4px solid #eee; padding:12px 14px; border-radius:6px; background:#fafafa;}
@@ -1914,6 +1968,12 @@ async function downloadPDF() {
     
     const pages = document.querySelectorAll('.page');
     
+    // Temporarily force A4 dimensions for PDF generation
+    pages.forEach(page => {
+      page.style.width = '210mm';
+      page.style.maxWidth = 'none';
+    });
+    
     for (let i = 0; i < pages.length; i++) {
       if (i > 0) pdf.addPage();
       
@@ -1921,8 +1981,11 @@ async function downloadPDF() {
         scale: 2,
         useCORS: true,
         backgroundColor: '#ffffff',
-        logging: false
+        logging: false,
+        windowWidth: 794
       });
+
+
       
       const imgData = canvas.toDataURL('image/png');
       const imgWidth = 210;
@@ -1933,8 +1996,17 @@ async function downloadPDF() {
     
     pdf.save('Revenue_Leak_Report.pdf');
     
+    // Remove temporary A4 dimensions
+    pages.forEach(page => {
+      page.style.width = '';
+      page.style.maxWidth = '';
+    });
+    
     btn.disabled = false;
     btn.innerText = '📥 Download PDF Report';
+
+
+
     
   } catch (error) {
     console.error('PDF error:', error);
