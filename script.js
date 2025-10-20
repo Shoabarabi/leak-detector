@@ -1693,6 +1693,56 @@ function drawPieChart(leakPercentage) {
 
 // Handle inline email submission
 // REPLACE YOUR EXISTING handleInlineEmailSubmit FUNCTION WITH THIS
+
+async function handleInlineEmailSubmit(result) {
+  let formEmail = document.getElementById('inline-report-email').value;
+
+  if (!formEmail && userData.email) {
+    formEmail = userData.email;
+    document.getElementById('inline-report-email').value = formEmail;
+  }
+  
+  if (!formEmail || !formEmail.includes('@')) {
+    alert('Please enter a valid email address');
+    return;
+  }
+
+  showLoading('Sending your report to ' + formEmail + '...');
+  
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        action: 'updateFinalEmail',
+        sessionId: sessionId,
+        finalEmail: formEmail
+      })
+    });
+    
+    const result = await response.json();
+    
+    hideLoading();
+    
+    if (result.success) {
+      alert(`✓ Report sent to ${formEmail}!\n\nCheck your inbox for the full analysis with booking calendar.`);
+      
+      // Show full results
+      hideAllScreens();
+      document.getElementById('results-screen').classList.add('active');
+      displayFullResults(currentResults);
+    } else {
+      alert('Error: ' + (result.error || 'Failed to send report'));
+    }
+    
+  } catch (error) {
+    hideLoading();
+    console.error('Error:', error);
+    alert('Error sending report: ' + error.message);
+  }
+}
+
+/*
 async function handleInlineEmailSubmit(result) {
   let formEmail = document.getElementById('inline-report-email').value;
   //let formEmail = document.getElementById('inline-report-email').value;
@@ -1742,7 +1792,7 @@ async function handleInlineEmailSubmit(result) {
   displayFullResults(currentResults);
 }
 
-
+*/
 
 /*
 async function handleInlineEmailSubmit(result) {
