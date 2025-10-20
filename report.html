@@ -631,6 +631,67 @@
     }
   }
 
+  @media (max-width: 768px) {
+  .leak-item {
+    padding: 12px;
+    min-height: auto;
+  }
+  
+  .leak-item-name {
+    font-size: 13px;
+    word-break: break-word;
+  }
+  
+  .leak-item-reason {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .leak-item {
+    padding: 10px;
+    min-height: auto;
+  }
+  
+  .leak-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .leak-item-name {
+    font-size: 12px;
+    word-break: break-word;
+  }
+  
+  .leak-item-reason {
+    font-size: 11px;
+    margin-top: 6px;
+  }
+  
+  #otherLeaksGrid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+
+.donut-percentage {
+  font-size: 66px;
+}
+
+@media (max-width: 768px) {
+  .donut-percentage {
+    font-size: 52px;
+  }
+}
+
+@media (max-width: 480px) {
+  .donut-percentage {
+    font-size: 42px;
+  }
+}
+
 
 
 </style>
@@ -691,7 +752,8 @@
         <canvas id="donutPage1"></canvas>
         
         <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); text-align:center; pointer-events: none;">
-            <div style="font-size:66px; font-weight:800; color:var(--danger); line-height:1;" id="donutCenterText">17.1%</div>
+            <div style="font-size:66px; font-weight:800; color:var(--danger); line-height:1;" class="donut-percentage" id="donutCenterText">17.1%</div>
+            
             <div style="font-size:14px; color:var(--muted); margin-top:8px;">Revenue Leakage</div>
         </div>
     </div>
@@ -2218,6 +2280,8 @@ async function initializeReport() {
 }
 
 document.addEventListener('DOMContentLoaded', initializeReport);
+
+
 </script>
 
 </body>
