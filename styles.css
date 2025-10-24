@@ -871,3 +871,88 @@ body {
 .email-capture-modal button:hover {
   background: #5a67d8 !important;
 }
+
+/* Email Success Banner */
+.email-success-banner {
+  background: rgba(0, 255, 255, 0.08);
+  border-left: 4px solid #00FFFF;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  backdrop-filter: blur(10px);
+}
+
+.banner-content {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.banner-icon {
+  font-size: 24px;
+  min-width: 30px;
+  text-align: center;
+}
+
+.banner-text {
+  flex: 1;
+  color: #ffffff;
+}
+
+.banner-headline {
+  font-size: 1.1em;
+  font-weight: 700;
+  color: #00FFFF;
+  margin-bottom: 8px;
+}
+
+.banner-subject {
+  font-size: 0.95em;
+  color: #cccccc;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background: rgba(0, 255, 255, 0.1);
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+#dynamic-subject-line {
+  color: #00FFFF;
+  font-weight: 600;
+}
+
+.banner-action {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 0.95em;
+}
+
+.banner-info {
+  color: #ffffff;
+}
+
+.banner-divider {
+  color: #666666;
+}
+
+.banner-link {
+  color: #00FFFF;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.banner-link:hover {
+  text-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+  text-decoration: underline;
+}
+
+.banner-subtext {
+  font-size: 0.9em;
+  color: #aaaaaa;
+  line-height: 1.4;
+  margin-top: 10px;
+}

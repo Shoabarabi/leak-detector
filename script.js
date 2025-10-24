@@ -1725,12 +1725,21 @@ async function handleInlineEmailSubmit(result) {
     hideLoading();
     
     if (result.success) {
+      // Store subject and URL for banner display
+      window.emailSubject = result.emailSubject;
+      window.reportUrl = result.reportUrl;
+      window.userEmail = formEmail;
+      
       alert(`✓ Report sent to ${formEmail}!\n\nCheck your inbox for the full analysis with booking calendar.`);
       
       // Show full results
       hideAllScreens();
       document.getElementById('results-screen').classList.add('active');
       displayFullResults(currentResults);
+      
+      // Populate banner with dynamic values
+      setTimeout(populateEmailBanner, 100);
+    
     } else {
       alert('Error: ' + (result.error || 'Failed to send report'));
     }
@@ -1883,6 +1892,26 @@ function displayFullResults(result) {
     topLeaksContainer.appendChild(leakDiv);
   });
   
+  // Populate email banner with dynamic values
+  function populateEmailBanner() {
+    if (window.emailSubject) {
+      const subjectElement = document.getElementById('dynamic-subject-line');
+      if (subjectElement) {
+        subjectElement.textContent = window.emailSubject;
+      }
+    }
+    
+    if (window.reportUrl) {
+      const linkElement = document.getElementById('view-report-link');
+      if (linkElement) {
+        linkElement.href = window.reportUrl;
+        linkElement.target = '_blank';
+      }
+    }
+  }
+
+
+
   // Show recovery potential
   document.getElementById('recovery-dollars').textContent = 
     formatCurrency(result.potentialRecovery);
