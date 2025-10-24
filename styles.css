@@ -872,26 +872,28 @@ body {
   background: #5a67d8 !important;
 }
 
+
 /* Email Success Banner */
 .email-success-banner {
-  background: rgba(255, 255, 0, 0.1);
-  border-left: 4px solid #FFFF00;
-
+  background: #1a1a1a;
+  border-left: 5px solid #FFFF00;
   border-radius: 8px;
-  padding: 20px;
+  padding: 24px;
   margin-bottom: 30px;
   backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(255, 255, 0, 0.15);
 }
 
 .banner-content {
   display: flex;
-  gap: 15px;
-  align-items: flex-start;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .banner-icon {
-  font-size: 24px;
-  min-width: 30px;
+  font-size: 32px;
+  min-width: 40px;
   text-align: center;
 }
 
@@ -901,19 +903,19 @@ body {
 }
 
 .banner-headline {
-  font-size: 1.1em;
+  font-size: 1.3em;
   font-weight: 700;
   color: #FFFF00;
   margin-bottom: 8px;
 }
 
 .banner-subject {
-  font-size: 0.95em;
-  color: #cccccc;
-  margin-bottom: 12px;
-  padding: 8px 12px;
-  background: rgba(0, 255, 255, 0.1);
-  border-radius: 4px;
+  font-size: 0.9em;
+  color: #e0e0e0;
+  margin-bottom: 0px;
+  padding: 0px;
+  background: transparent;
+  border-radius: 0px;
   font-family: monospace;
 }
 
@@ -925,35 +927,42 @@ body {
 .banner-action {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 15px;
+  margin-bottom: 0px;
   font-size: 0.95em;
 }
 
 .banner-info {
   color: #ffffff;
+  font-size: 0.9em;
 }
 
 .banner-divider {
-  color: #666666;
+  color: #555555;
 }
 
 .banner-link {
-  color: #FFFF00;
+  display: inline-block;
+  color: #1a1a1a;
+  background: #FFFF00;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
+  padding: 12px 24px;
+  border-radius: 6px;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 255, 0, 0.3);
 }
 
 .banner-link:hover {
-  text-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
-  text-decoration: underline;
+  background: #ffff33;
+  box-shadow: 0 6px 25px rgba(255, 255, 0, 0.5);
+  transform: translateY(-2px);
 }
 
 .banner-subtext {
-  font-size: 0.9em;
+  font-size: 0.85em;
   color: #aaaaaa;
   line-height: 1.4;
-  margin-top: 10px;
+  margin-top: 12px;
 }
