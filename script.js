@@ -1892,23 +1892,7 @@ function displayFullResults(result) {
     topLeaksContainer.appendChild(leakDiv);
   });
   
-  // Populate email banner with dynamic values
-  function populateEmailBanner() {
-    if (window.emailSubject) {
-      const subjectElement = document.getElementById('dynamic-subject-line');
-      if (subjectElement) {
-        subjectElement.textContent = window.emailSubject;
-      }
-    }
-    
-    if (window.reportUrl) {
-      const linkElement = document.getElementById('view-report-link');
-      if (linkElement) {
-        linkElement.href = window.reportUrl;
-        linkElement.target = '_blank';
-      }
-    }
-  }
+  
 
 
 
@@ -1940,6 +1924,24 @@ function displayFullResults(result) {
   
   // No email modal - user already provided email
 }
+
+// Populate email banner with dynamic values
+  function populateEmailBanner() {
+    if (window.emailSubject) {
+      const subjectElement = document.getElementById('dynamic-subject-line');
+      if (subjectElement) {
+        subjectElement.textContent = window.emailSubject;
+      }
+    }
+    
+    if (window.reportUrl) {
+      const linkElement = document.getElementById('view-report-link');
+      if (linkElement) {
+        linkElement.href = window.reportUrl;
+        linkElement.target = '_blank';
+      }
+    }
+  }
 
 // Update progress bar
 function updateProgress(percentage) {
