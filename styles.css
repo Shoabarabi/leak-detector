@@ -912,11 +912,17 @@ body {
   margin-bottom: 6px;
 }
 
+
+
 .banner-subject {
-  display: none;
+  font-size: 0.9em;
+  color: #ffffff;
+  margin-bottom: 12px;
+  padding: 0px;
+  background: transparent;
+  border-radius: 0px;
+  font-family: monospace;
 }
-
-
 
 
 
@@ -925,12 +931,13 @@ body {
   font-weight: 600;
 }
 
+
+
 .banner-action {
-  display: inline;
+  display: block;
   font-size: 0.9em;
   margin: 0;
 }
-
 
 
 .banner-info {
@@ -945,27 +952,31 @@ body {
 
 .banner-link {
   display: inline-block;
-  color: #FFD700;
-  background: transparent;
+  color: #1a1a1a;
+  background: #FFD700;
   border: 1px solid #FFD700;
   text-decoration: none;
   font-weight: 600;
   cursor: pointer;
-  padding: 6px 14px;
+  padding: 8px 18px;
   border-radius: 4px;
   transition: all 0.3s ease;
   box-shadow: none;
   font-size: 0.9em;
-  margin-left: 8px;
+  margin-top: 10px;
+  display: block;
+  width: fit-content;
 }
 
 .banner-link:hover {
-  color: #1a1a1a;
-  background: #FFD700;
-  border-color: #FFD700;
+  color: #FFD700;
+  background: transparent;
+  border: 1px solid #FFD700;
   box-shadow: none;
   transform: none;
 }
+
+
 
 .banner-subtext {
   display: none;
