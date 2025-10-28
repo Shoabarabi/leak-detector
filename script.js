@@ -1730,15 +1730,18 @@ async function handleInlineEmailSubmit(result) {
       window.reportUrl = result.reportUrl;
       window.userEmail = formEmail;
       
-      alert(`✓ Report sent to ${formEmail}!\n\nCheck your inbox for the full analysis with booking calendar.`);
-      
+      //alert(`✓ Report sent to ${formEmail}!\n\nCheck your inbox for the full analysis with booking calendar.`);
+      /*
       // Show full results
       hideAllScreens();
       document.getElementById('results-screen').classList.add('active');
       displayFullResults(currentResults);
       
       // Populate banner with dynamic values
-      setTimeout(populateEmailBanner, 100);
+      setTimeout(populateEmailBanner, 50);
+      */
+      // NEW - Redirect to report page
+      window.location.href = result.reportUrl;
     
     } else {
       alert('Error: ' + (result.error || 'Failed to send report'));
