@@ -15,6 +15,25 @@ $googleUrl = 'https://script.google.com/macros/s/AKfycbyCdYzknIjeDe8hc8qO-P_n4an
 // Handle POST for email sending
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = file_get_contents('php://input');
+
+    // ===== NEW: Add IP address and cluster_id to POST data =====
+    try {
+        $inputData = json_decode($input, true);
+        
+        // Add IP address (automatic from server)
+        $inputData['ipAddress'] = $_SERVER['REMOTE_ADDR'];
+        
+        // Add cluster_id from GET parameter (if available)
+        $inputData['cluster_id'] = $_GET['cluster_id'] ?? 'C0';
+        
+        // Re-encode the updated data
+        $input = json_encode($inputData);
+    } catch (Exception $e) {
+        // If JSON parsing fails, still continue (graceful fallback)
+        error_log('JSON parse error in proxy.php: ' . $e->getMessage());
+    }
+    // ===== END NEW =====
+    
     
     $ch = curl_init($googleUrl);
     curl_setopt($ch, CURLOPT_POST, 1);
@@ -51,6 +70,11 @@ if ($action === 'calculateLeakage') {
     $url .= '&name=' . urlencode($_GET['name']);        // ADD THIS
     $url .= '&company=' . urlencode($_GET['company']);  // ADD THIS
     $url .= '&email=' . urlencode($_GET['email']);      // ADD THIS
+
+    // ===== NEW: Add IP address and cluster_id to GET requests =====
+    $url .= '&ipAddress=' . urlencode($_SERVER['REMOTE_ADDR']);
+    $url .= '&cluster_id=' . urlencode($_GET['cluster_id'] ?? 'C0');
+    // ===== END NEW =====
 
 
 

@@ -31,6 +31,13 @@ const userData = {
 document.addEventListener('DOMContentLoaded', async function() {
   console.log('Business Profit Leak Diagnostic initialized');
   console.log('User data from URL:', userData);
+  // ===== NEW: Capture cluster_id from URL immediately =====
+  const urlParams = new URLSearchParams(window.location.search);
+  const clusterIdFromURL = urlParams.get('cluster_id') || 'C0';
+  window.currentClusterID = clusterIdFromURL;
+  sessionStorage.setItem('clusterID', clusterIdFromURL);
+  console.log('Quiz page loaded with cluster_id:', clusterIdFromURL);
+  // ===== END NEW =====
   
   generateSessionId();
   
@@ -384,6 +391,10 @@ function calculateResults() {
   });
   
   showLoading('Analyzing your profit leaks...');
+
+  // ===== NEW: Add cluster_id to the parameters =====
+  const clusterID = sessionStorage.getItem('clusterID') || 'C0';
+  // ===== END NEW =====
   
   const params = new URLSearchParams({
     action: 'calculateLeakage',
@@ -393,7 +404,8 @@ function calculateResults() {
     responses: JSON.stringify(responses),
     name: userData.name,
     company: userData.company,
-    email: userData.email
+    email: userData.email,
+    cluster_id: clusterID  // ← ADD THIS LINE
   });
   
   fetch(API_URL + '?' + params.toString())
