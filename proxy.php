@@ -21,7 +21,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $inputData = json_decode($input, true);
         
         // Add IP address (automatic from server)
-        $inputData['ipAddress'] = $_SERVER['REMOTE_ADDR'];
+        
+
+        // Get real visitor IP (handles proxies/Cloudflare)
+        $ipAddress = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+
+        if (!empty($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+            $ipAddress = $_SERVER['HTTP_CF_CONNECTING_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ipAddress = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
+        }
+
+        $inputData['ipAddress'] = $ipAddress;
         
         // Add cluster_id from GET parameter (if available)
         $inputData['cluster_id'] = $_GET['cluster_id'] ?? 'C0';
@@ -72,7 +83,20 @@ if ($action === 'calculateLeakage') {
     $url .= '&email=' . urlencode($_GET['email']);      // ADD THIS
 
     // ===== NEW: Add IP address and cluster_id to GET requests =====
-    $url .= '&ipAddress=' . urlencode($_SERVER['REMOTE_ADDR']);
+    
+
+    // Get real visitor IP
+    $ipAddress = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+
+    if (!empty($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+        $ipAddress = $_SERVER['HTTP_CF_CONNECTING_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $ipAddress = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
+    }
+
+    $url .= '&ipAddress=' . urlencode($ipAddress);
+
+
     $url .= '&cluster_id=' . urlencode($_GET['cluster_id'] ?? 'C0');
     // ===== END NEW =====
 
