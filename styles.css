@@ -982,5 +982,231 @@ body {
   display: none;
 }
 
+/* ============================================
+   INDUSTRY CONFIRMATION BANNER
+   ============================================ */
 
+/* Main banner container - shows selected industry */
+.industry-confirmation-banner {
+    display: flex;
+    justify-content: space-between;  /* Button on right side */
+    align-items: center;
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.08), rgba(0, 255, 255, 0.03));
+    border: 1px solid rgba(0, 255, 255, 0.25);
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin-bottom: 30px;  /* Space below banner before headcount question */
+    backdrop-filter: blur(10px);  /* Frosted glass effect */
+}
+
+/* Left side - contains icon and text */
+.confirmation-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;  /* Space between checkmark and text */
+}
+
+/* Checkmark circle icon */
+.confirmation-icon {
+    font-size: 24px;
+    color: #00FFFF;  /* Cyan to match your brand */
+    width: 36px;
+    height: 36px;
+    background: rgba(0, 255, 255, 0.15);
+    border-radius: 50%;  /* Makes it circular */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;  /* Don't let it shrink on small screens */
+}
+
+/* Text container (holds label + value) */
+.confirmation-text {
+    display: flex;
+    flex-direction: column;  /* Stack label above value */
+    gap: 3px;
+}
+
+/* "Industry:" label text */
+.confirmation-label {
+    font-size: 0.85em;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+/* "Beauty & Skincare" value text - this gets updated by JavaScript */
+.confirmation-value {
+    font-size: 1.1em;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* "Change" button styling */
+.btn-change {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;  /* Keep "Change" on one line */
+    flex-shrink: 0;  /* Don't let button shrink */
+}
+
+/* Change button hover effect */
+.btn-change:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #00FFFF;
+    color: #00FFFF;
+    transform: translateY(-1px);  /* Subtle lift on hover */
+}
+
+/* Change button when clicked */
+.btn-change:active {
+    transform: translateY(0);  /* Push down when clicked */
+}
+
+/* ============================================
+   HEADCOUNT SELECTION BUTTONS
+   ============================================ */
+
+/* Grid container for headcount buttons */
+.headcount-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));  /* Responsive grid - adjusts columns based on screen size */
+    gap: 15px;  /* Space between buttons */
+    margin-top: 30px;
+}
+
+/* Individual headcount button */
+.headcount-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 25px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    position: relative;  /* Needed for checkmark positioning */
+    overflow: hidden;
+}
+
+/* The number display (e.g., "11-50") */
+.headcount-number {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+
+/* The label text (e.g., "Growing Company") */
+.headcount-label {
+    font-size: 0.9em;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Button hover effect */
+.headcount-btn:hover {
+    background: rgba(0, 255, 255, 0.08);
+    border-color: rgba(0, 255, 255, 0.4);
+    transform: translateY(-3px);  /* Lift up on hover */
+    box-shadow: 0 8px 20px rgba(0, 255, 255, 0.2);
+}
+
+/* Number turns cyan on hover */
+.headcount-btn:hover .headcount-number {
+    color: #00FFFF;
+}
+
+/* Selected state - shows briefly before auto-advancing to quiz */
+.headcount-btn.selected {
+    background: rgba(0, 255, 255, 0.15);
+    border-color: #00FFFF;
+    transform: scale(1.02);
+}
+
+/* Number turns cyan when selected */
+.headcount-btn.selected .headcount-number {
+    color: #00FFFF;
+}
+
+/* Checkmark that appears in top-right when selected */
+.headcount-btn.selected::before {
+    content: '✓';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    color: #00FFFF;
+    font-weight: bold;
+    animation: checkmark-pop 0.3s ease;
+}
+
+/* ============================================
+   MOBILE RESPONSIVE - ADJUSTMENTS FOR PHONES
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* Stack banner vertically on mobile */
+    .industry-confirmation-banner {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        padding: 20px 15px;
+    }
+    
+    /* Center content on mobile */
+    .confirmation-content {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    /* Center text alignment */
+    .confirmation-text {
+        align-items: center;
+    }
+    
+    /* Full-width change button on mobile */
+    .btn-change {
+        width: 100%;
+        padding: 12px 20px;
+    }
+    
+    /* 2 columns on mobile for headcount buttons */
+    .headcount-options {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    /* Smaller text on mobile */
+    .headcount-number {
+        font-size: 1.5em;
+    }
+    
+    .headcount-label {
+        font-size: 0.75em;
+    }
+}
+
+/* Checkmark pop animation */
+@keyframes checkmark-pop {
+    0% { 
+        transform: scale(0) rotate(-180deg);
+        opacity: 0;
+    }
+    60% { 
+        transform: scale(1.3) rotate(10deg);
+    }
+    100% { 
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
 

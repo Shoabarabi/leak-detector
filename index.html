@@ -67,6 +67,8 @@
         </div>
 
         <!-- Revenue Input Screen -->
+        <!-- 
+        
         <div id="revenue-input" class="screen">
             <h2>What's your annual revenue?</h2>
             <p>Last 12 months, approximately</p>
@@ -91,6 +93,66 @@
             <button id="start-assessment" class="btn-primary hidden" onclick="startAssessment()">
                 Start Assessment
             </button>
+        </div>
+         -->
+        
+        <!-- Headcount Selection Screen -->
+        <div id="headcount-input" class="screen">
+            
+            <!-- Industry Confirmation Banner -->
+            <!-- Shows selected industry with "Change" button to go back -->
+            <div class="industry-confirmation-banner">
+                <div class="confirmation-content">
+                    <div class="confirmation-icon">✓</div>
+                    <div class="confirmation-text">
+                        <span class="confirmation-label">Industry:</span>
+                        <span class="confirmation-value" id="selected-industry-display">Loading...</span>
+                    </div>
+                </div>
+                <button class="btn-change" onclick="goBackToIndustry()">
+                    Change
+                </button>
+            </div>
+            
+            <!-- Headcount Question -->
+            <h2>How many people work at your company?</h2>
+            <p>This helps us calculate accurate profit leaks for your organization size</p>
+            
+            <!-- Headcount Options Grid -->
+            <div class="headcount-options">
+                
+                <button class="headcount-btn" onclick="selectHeadcount('1-10', this)">
+                    <div class="headcount-number">1-10</div>
+                    <div class="headcount-label">Small Team</div>
+                </button>
+                
+                <button class="headcount-btn" onclick="selectHeadcount('11-50', this)">
+                    <div class="headcount-number">11-50</div>
+                    <div class="headcount-label">Growing Company</div>
+                </button>
+                
+                <button class="headcount-btn" onclick="selectHeadcount('51-100', this)">
+                    <div class="headcount-number">51-100</div>
+                    <div class="headcount-label">Mid-Sized Business</div>
+                </button>
+                
+                <button class="headcount-btn" onclick="selectHeadcount('101-250', this)">
+                    <div class="headcount-number">101-250</div>
+                    <div class="headcount-label">Established Company</div>
+                </button>
+                
+                <button class="headcount-btn" onclick="selectHeadcount('251-500', this)">
+                    <div class="headcount-number">251-500</div>
+                    <div class="headcount-label">Large Enterprise</div>
+                </button>
+                
+                <button class="headcount-btn" onclick="selectHeadcount('501+', this)">
+                    <div class="headcount-number">501+</div>
+                    <div class="headcount-label">Major Enterprise</div>
+                </button>
+                
+            </div>
+            
         </div>
 
         <!-- Quiz Screen -->

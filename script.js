@@ -1,6 +1,7 @@
 // Global variables
 let selectedIndustry = '';
 let selectedRevenue = 0;
+let selectedHeadcount = '';  // NEW - stores headcount selection
 let sessionId = '';
 let currentQuestionIndex = 0;
 let questions = [];
@@ -15,7 +16,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const nameFromURL = urlParams.get('name') || '';
 const companyFromURL = urlParams.get('company') || '';
 const industryFromURL = urlParams.get('industry') || '';
-const revenueFromURL = parseFloat(urlParams.get('revenue')) || 0;
+const headcountFromURL = urlParams.get('headcount') || '';  // ← CHANGED from revenue
 const emailFromURL = urlParams.get('email') || '';
 
 // Store these in a global object for easy access
@@ -23,7 +24,7 @@ const userData = {
   name: nameFromURL,
   company: companyFromURL,
   industry: industryFromURL,
-  revenue: revenueFromURL * 1000000, // Convert from millions to actual amount
+  headcount: headcountFromURL,  // ← CHANGED
   email: emailFromURL
 };
 
@@ -31,37 +32,63 @@ const userData = {
 document.addEventListener('DOMContentLoaded', async function() {
   console.log('Business Profit Leak Diagnostic initialized');
   console.log('User data from URL:', userData);
-  // ===== NEW: Capture cluster_id from URL immediately =====
+  
+  // Capture cluster_id from URL
   const urlParams = new URLSearchParams(window.location.search);
   const clusterIdFromURL = urlParams.get('cluster_id') || 'C0';
   window.currentClusterID = clusterIdFromURL;
   sessionStorage.setItem('clusterID', clusterIdFromURL);
   console.log('Quiz page loaded with cluster_id:', clusterIdFromURL);
-  // ===== END NEW =====
   
   generateSessionId();
   
-  // Check if we have the required data from URL
-  if (userData.industry && userData.revenue > 0) {
-    // Skip directly to quiz
+  // ===== FIX: Handle all 4 scenarios properly =====
+  
+  // Scenario A: Both industry AND headcount selected → Skip to quiz
+  if (userData.industry && userData.industry !== 'not_selected' && 
+      userData.headcount && userData.headcount !== 'not_selected') {
+    
+    console.log('✅ Scenario A: Both selected - Skipping to quiz');
     selectedIndustry = userData.industry;
-    selectedRevenue = userData.revenue;
+    selectedHeadcount = userData.headcount;
     
-    // Hide industry and revenue screens
     hideAllScreens();
-    
-    // Wait for questions to load BEFORE starting assessment
     await loadQuestions();
-    console.log('Questions loaded, now starting assessment');
-    
-    // Start assessment directly (no timeout needed now)
+    console.log('Questions loaded, starting assessment');
     startAssessmentDirectly();
-  } else {
-    // Normal flow if no URL parameters
+  }
+  
+  // Scenario B: Only industry selected → Show headcount screen
+  else if (userData.industry && userData.industry !== 'not_selected' && 
+           (!userData.headcount || userData.headcount === 'not_selected')) {
+    
+    console.log('✅ Scenario B: Industry only - Showing headcount screen');
+    window.selectedIndustry = userData.industry;
+    selectedIndustry = userData.industry;
+    
+    hideAllScreens();
+    document.getElementById('headcount-input').classList.add('active');
+    
+    // Update banner with industry name
+    const displayElement = document.getElementById('selected-industry-display');
+    if (displayElement) {
+      displayElement.textContent = userData.industry;
+    }
+    
+    updateProgress(33);
+    loadQuestions();
+  }
+  
+  // Scenario C & D: Industry not selected → Show industry screen
+  else {
+    console.log('✅ Scenario C/D: No industry - Showing industry screen');
     loadIndustries();
     loadQuestions();
   }
 });
+
+
+
 
 
 
@@ -136,18 +163,109 @@ function displayIndustries(industries) {
   console.log('Industries displayed:', industries.length);
 }
 
-// Industry selection
-function selectIndustry(industry, button) {
-  selectedIndustry = industry;
-  
-  document.querySelectorAll('.industry-btn').forEach(btn => {
-    btn.classList.remove('selected');
-  });
-  
-  button.classList.add('selected');
-  document.getElementById('continue-to-revenue').classList.remove('hidden');
-  
-  console.log('Selected industry:', industry);
+
+// INDUSTRY SELECTION
+// When user clicks an industry card, store it and advance to HEADCOUNT screen
+
+function selectIndustry(industryName, element) {
+    // Store the DISPLAY NAME for use throughout the app
+    window.selectedIndustry = industryName;
+    selectedIndustry = industryName;  // Also set local variable
+    window.industrySelected = true;
+    
+    console.log('✅ Industry selected:', industryName);
+    
+    // Visual feedback - highlight the clicked card
+    document.querySelectorAll('.industry-btn').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    if (element) {
+        element.classList.add('selected');
+    }
+    
+    // CHECK: Was headcount already provided in URL?
+    if (userData.headcount && userData.headcount !== 'not_selected') {
+        console.log('✅ Headcount already from URL:', userData.headcount, '- Skipping to quiz');
+        selectedHeadcount = userData.headcount;
+        window.selectedHeadcount = userData.headcount;
+        
+        // Skip headcount screen, go directly to quiz
+        setTimeout(() => {
+            startAssessment();
+        }, 100);
+    } else {
+        console.log('❌ No headcount from URL - Showing headcount screen');
+        // No headcount from URL - show headcount screen
+        setTimeout(() => {
+            showHeadcountScreen();
+        }, 100);
+    }
+}
+
+
+// SHOW HEADCOUNT SCREEN
+// Hides industry screen, shows headcount screen, updates confirmation banner
+function showHeadcountScreen() {
+    // Hide industry selection screen
+    document.getElementById('industry-selection').classList.remove('active');
+    
+    // Show headcount input screen
+    document.getElementById('headcount-input').classList.add('active');
+    
+    // Update confirmation banner with selected industry name
+    const displayElement = document.getElementById('selected-industry-display');
+    if (displayElement && window.selectedIndustry) {
+        displayElement.textContent = window.selectedIndustry;
+    }
+    
+    // Update progress bar to 33% (industry done, headcount in progress)
+    updateProgress(33);
+    
+    // Scroll to top of page smoothly
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    console.log('👥 Headcount screen shown with industry:', window.selectedIndustry);
+}
+
+// HEADCOUNT SELECTION
+// When user clicks a headcount button, store it and advance to QUIZ
+function selectHeadcount(headcountRange, element) {
+    // Store the headcount range (e.g., "11-50")
+    window.selectedHeadcount = headcountRange;
+    window.headcountSelected = true;
+    
+    console.log('✅ Headcount selected:', headcountRange);
+    
+    // Add visual feedback to clicked button (shows checkmark briefly)
+    if (element) {
+        element.classList.add('selected');
+    }
+    
+    // INSTANT advance to quiz (100ms for visual feedback)
+    setTimeout(() => {
+        startAssessment();
+    }, 100);
+}
+
+// GO BACK TO INDUSTRY SELECTION
+// When user clicks "Change" button in confirmation banner
+function goBackToIndustry() {
+    console.log('⬅️ Going back to industry selection');
+    
+    // Hide headcount screen
+    document.getElementById('headcount-input').classList.remove('active');
+    
+    // Show industry screen again
+    document.getElementById('industry-selection').classList.add('active');
+    
+    // Update progress bar back to 0
+    updateProgress(0);
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // The previously selected industry card should still be highlighted
+    // (it keeps the 'selected' class from before)
 }
 
 // Show revenue input screen
@@ -236,14 +354,13 @@ function loadQuestions() {
     });
 }*/
 
-
 // Start the assessment
 function startAssessment() {
-  if (!selectedIndustry || !selectedRevenue) {
-    alert('Please select both industry and revenue first.');
+  if (!window.selectedIndustry || !window.selectedHeadcount) {
+    alert('Please select both industry and headcount first.');
     return;
   }
-  
+
   currentQuestionIndex = 0;
   responses = [];
   
@@ -253,8 +370,11 @@ function startAssessment() {
   displayQuestion();
 }
 
+
+
 function startAssessmentDirectly() {
-  console.log('Starting assessment with:', selectedIndustry, selectedRevenue);
+  console.log('Starting assessment with:', window.selectedIndustry, window.selectedHeadcount);    
+  
   
   currentQuestionIndex = 0;
   responses = [];
