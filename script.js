@@ -51,6 +51,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     console.log('✅ Scenario A: Both selected - Skipping to quiz');
     selectedIndustry = userData.industry;
     selectedHeadcount = userData.headcount;
+    window.selectedIndustry = userData.industry;   // ← add this
+    window.selectedHeadcount = userData.headcount; // ← add this
     
     hideAllScreens();
     await loadQuestions();
