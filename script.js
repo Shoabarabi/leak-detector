@@ -515,6 +515,62 @@ function calculateResults() {
     return;
   }
 
+  // Derive revenue from headcount × FTE revenue per employee
+  const fteRevenueByIndustry = {
+    'Beauty & Skincare': 250000,
+    'Supplements & Nutraceuticals': 280000,
+    'Fashion & Apparel': 125000,
+    'Home & Garden': 160000,
+    'Pet Products': 200000,
+    'Food & Beverage': 140000,
+    'Electronics & Tech Accessories': 175000,
+    'Fitness & Wellness': 180000,
+    'Baby & Kids': 190000,
+    'Jewelry & Accessories': 240000,
+    'Outdoor & Sports': 135000,
+    'Automotive Accessories': 130000,
+    'Arts & Crafts': 115000,
+    'Personal Care (Salons/Spas)': 220000,
+    'Subscription Boxes': 170000,
+    'Consulting': 175000,
+    'Tech Services': 155000,
+    'Real Estate': 120000,
+    'Business Services': 150000,
+    'Education': 110000,
+    'Marketing Services': 165000,
+    'Recruiting': 135000,
+    'Nonprofit': 85000,
+    'Retail Consulting': 100000,
+    'Health Tech': 185000,
+    'Publishing': 160000,
+    'Electronics & Tech (SaaS)': 215000,
+    'Ecommerce Services': 105000,
+    'Tech Consulting': 175000,
+    'Personal Care (Dental)': 125000,
+    'Business Advocacy': 95000,
+    'Retail': 100000,
+    'Default (Other SMBs)': 150000
+  };
+
+  const headcountMidpoints = {
+    '1-10': 5,
+    '11-50': 30,
+    '51-100': 75,
+    '101-150': 125,
+    '151-250': 200,
+    '251-500': 375,
+    '501+': 600
+  };
+
+  const headcountValue = window.selectedHeadcount || selectedHeadcount || '11-50';
+  const industryValue = window.selectedIndustry || selectedIndustry || 'Default (Other SMBs)';
+  const fteRevenue = fteRevenueByIndustry[industryValue] || 150000;
+  const midpoint = headcountMidpoints[headcountValue] || 30;
+  
+  selectedRevenue = fteRevenue * midpoint;
+  
+  console.log('💰 Derived revenue:', selectedRevenue, '| Industry:', industryValue, '| Headcount:', headcountValue, '| FTE Rate:', fteRevenue, '| Midpoint:', midpoint);
+
   // ADD THIS DEBUG LINE
   console.log('Sending to backend:', {
     name: userData.name,
