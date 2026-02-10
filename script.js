@@ -184,15 +184,33 @@ function selectIndustry(industryName, element) {
     }
     
     // CHECK: Was headcount already provided in URL?
-    if (userData.headcount && userData.headcount !== 'not_selected') {
+        if (userData.headcount && userData.headcount !== 'not_selected') {
         console.log('✅ Headcount already from URL:', userData.headcount, '- Skipping to quiz');
         selectedHeadcount = userData.headcount;
         window.selectedHeadcount = userData.headcount;
         
-        // Skip headcount screen, go directly to quiz
-        setTimeout(() => {
-            startAssessment();
-        }, 100);
+        // Wait for questions to be ready before starting
+        if (questions && questions.length > 0) {
+            console.log('✅ Questions already loaded, starting now');
+            setTimeout(() => startAssessment(), 100);
+        } else {
+            console.log('⏳ Questions not ready, waiting...');
+            const waitForQuestions = setInterval(() => {
+                if (questions && questions.length > 0) {
+                    clearInterval(waitForQuestions);
+                    console.log('✅ Questions now ready, starting assessment');
+                    startAssessment();
+                }
+            }, 50);
+
+            setTimeout(() => {
+                clearInterval(waitForQuestions);
+                if (!questions || questions.length === 0) {
+                    console.error('❌ Questions failed to load after 10 seconds');
+                    alert('Error loading quiz questions. Please refresh and try again.');
+                }
+            }, 10000);
+        }
     } else {
         console.log('❌ No headcount from URL - Showing headcount screen');
         // No headcount from URL - show headcount screen
