@@ -24,6 +24,40 @@
     })(window,document,'script','dataLayer','GTM-NW9BNBJQ');</script>
     <!-- End Google Tag Manager -->
 
+    <!-- Google Ads Conversion Tracking -->
+    <script>
+    // Store conversion IDs for Google Ads
+    window.googleAdsConversionIds = {
+        'quiz_start': 'AW-17947519523/p5ghCLagg_gbEKPUhe5C',
+        'quiz_complete': 'AW-17947519523/pgrWCJjwhfgbEKPUhe5C',
+        'calendar_click': 'AW-17947519523/vgklCJS5hvgbEKPUhe5C',
+        'whatsapp_click': 'AW-17947519523/zf6GCN7ik_gbEKPUhe5C'
+    };
+
+    // Helper function to fire Google Ads conversions
+    window.fireGoogleAdsConversion = function(conversionType, value) {
+        if (typeof gtag === 'undefined') {
+            console.warn('[Google Ads] gtag not loaded yet');
+            return;
+        }
+        
+        var conversionId = window.googleAdsConversionIds[conversionType];
+        if (!conversionId) {
+            console.warn('[Google Ads] Unknown conversion type:', conversionType);
+            return;
+        }
+        
+        gtag('event', 'conversion', {
+            'send_to': conversionId,
+            'value': value || 1.0,
+            'currency': 'USD'
+        });
+        
+        console.log('✅ Google Ads conversion fired:', conversionType, 'Value:', value);
+    };
+    </script>
+    <!-- End Google Ads Conversion Tracking -->
+
     <link rel="stylesheet" href="styles.css">
     <!-- Add these two script tags BEFORE the closing </head> tag -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>

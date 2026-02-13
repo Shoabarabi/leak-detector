@@ -596,13 +596,29 @@ function calculateResults() {
     email: userData.email,
     cluster_id: clusterID  // ← ADD THIS LINE
   });
-  
+
   fetch(API_URL + '?' + params.toString())
     .then(response => response.json())
     .then(result => {
-      currentResults = result; // Store results globally
+      currentResults = result;
+      
+      // ========== FIRE quiz_complete CONVERSION ==========
+      if (typeof window.fireGoogleAdsConversion === 'function') {
+          window.fireGoogleAdsConversion('quiz_complete', 300.0);
+      } else if (typeof gtag === 'function') {
+          // Fallback if helper function doesn't exist
+          gtag('event', 'conversion', {
+              'send_to': 'AW-17947519523/pgrWCJjwhfgbEKPUhe5C',
+              'value': 300.0,
+              'currency': 'USD'
+          });
+          console.log('✅ quiz_complete conversion fired (fallback)');
+      }
+      // ========== END CONVERSION TRACKING ==========
+      
       displayResults(result);
     })
+
     .catch(error => {
       console.error('Error calculating results:', error);
       hideLoading();
